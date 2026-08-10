@@ -1,5 +1,43 @@
 @import "tailwindcss";
 
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+/* :root{
+    --font-inter:"Inter", sans-serif;
+    --font-outfit:"Outfit","Inter",sans-serif;
+    --font-roboto: "Roboto", "Inter", sans-serif;
+} */
+
+@theme{
+    --color-bg:#070B14;
+    --color-orange:#FD6E59;
+    --color-orange-light:#FC9D44;
+    --color-white1:#FFFFFF;
+    --color-white2:#E6E6E6;
+    --color-box-dark:#1C212C;
+    --color-box-light:#5B5B6B;
+    --color-text-grey:#8888A2;
+
+    --font-inter:"Inter", sans-serif;
+    --font-outfit:"Outfit","Inter",sans-serif;
+    --font-roboto: "Roboto", "Inter", sans-serif;
+}
+
+@layer base{
+    body{
+        font-family:var(--font-inter), sans-serif;
+        background-color: var(--color-bg);
+        color: var(--color-white1);
+    }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: white !important;
+  transition: background-color 9999s ease-in-out 0s;
+}
+/* ITC Resources Portal */

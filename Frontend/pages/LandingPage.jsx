@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Plus } from "lucide-react";
+import Navbar from "../components/Navbar.jsx";
 
 const steps = [
   {
@@ -24,7 +25,7 @@ const steps = [
   },
 ];
 
-const navLinks = ["Home", "How it works", "Find Team"];
+// const navLinks = ["Home", "How it works", "Find Team"];
 
 export default function LandingPage() {
   return (
@@ -33,7 +34,8 @@ export default function LandingPage() {
 
      
       <div className="relative flex-1 flex flex-col ">
-        <header className="flex items-center justify-between px-6 py-5 md:px-12">
+                <Navbar />
+        {/* <header className="flex items-center justify-between px-6 py-5 md:px-12">
           <div className="flex items-baseline gap-2 pl-10 ">
             <span className="text-lg font-extrabold tracking-tight">itc</span>
             <span className="hidden text-[10px] uppercase tracking-widest text-gray-500 sm:inline">
@@ -60,7 +62,7 @@ export default function LandingPage() {
           >
             MY PROFILE
           </Link>
-        </header>
+        </header> */}
 
             <div className="pl-10">
         <section className="px-6 pb-16 pt-10 md:px-12 md:pt-16">
@@ -76,7 +78,7 @@ export default function LandingPage() {
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
-              to="/login"
+              to="/create-project"
               className="flex items-center gap-2 rounded-md bg-white/10 px-5 py-3 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-white/20"
             >
               <Plus size={14} strokeWidth={3} />
