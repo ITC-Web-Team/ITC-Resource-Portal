@@ -3,6 +3,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 import CreateProjectPage from "./pages/CreateProjectPage";
+import FindTeamRedirect from "./pages/FindTeamRedirect";
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/not-admin" element={<AdminPage />} />
         <Route path="/create-project" element={<CreateProjectPage />} />
+        <Route path="/find-team" element={<FindTeamRedirect />} />
       </Routes>
     </BrowserRouter>
   );

@@ -132,10 +132,10 @@ export default function LandingPage() {
               <p className="max-w-sm text-base font-semibold text-white sm:text-lg">
                 Great projects start with the right team.
               </p>
-              <button className="flex shrink-0 items-center gap-2 rounded-md bg-white px-5 py-3 text-xs font-bold tracking-wide text-black transition-transform hover:scale-[1.03]">
+              <Link to="/find-team" className="flex shrink-0 items-center gap-2 rounded-md bg-white px-5 py-3 text-xs font-bold tracking-wide text-black transition-transform hover:scale-[1.03]">
                 Find Your Team
                 <ArrowRight size={14} strokeWidth={3} />
-              </button>
+              </Link>
             </div>
 
             <div className="absolute -bottom-4 -right-4 flex h-12 w-12 items-center justify-center rounded-full border-2 border-orange-500 bg-[#0a0a0f] text-sm font-bold text-white shadow-lg">
