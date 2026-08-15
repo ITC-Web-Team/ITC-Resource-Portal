@@ -1,0 +1,42 @@
+
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+
+
+async function request(path, options = {}) {
+  const token = localStorage.getItem("token"); 
+
+  const res = await fetch(`${BASE_URL}${path}`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...(token && { Authorization: `Bearer ${token}` }),
+    },
+    ...options,
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    throw new Error(body.message || `Request failed: ${res.status}`);
+  }
+
+  return res.json();
+}
+
+export function fetchRequests({ status = "pending", search = "" } = {}) {
+  const params = new URLSearchParams({ status, search });
+  return request(`/requests?${params.toString()}`);
+  // 
+  //  [{ id, user, project, status, date }, ...]
+}
+
+export function fetchRequestDetails(id) {
+  return request(`/requests/${id}`);
+}
+
+export function approveRequest(id) {
+  return request(`/requests/${id}/approve`, { method: "PATCH" });
+}
+
+export function rejectRequest(id) {
+  return request(`/requests/${id}/reject`, { method: "PATCH" });
+}

@@ -5,10 +5,10 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-[#0a0a0f] flex items-center justify-center px-6">
-      <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-orange-600/25 blur-3xl" />
+      <div className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-[#FD6E59]/20 blur-3xl" />
 
       <svg
-        className="pointer-events-none absolute bottom-0 right-0 h-64 w-64 text-orange-600/40"
+        className="pointer-events-none absolute bottom-0 right-0 h-64 w-64 text-[#FD6E59]/30"
         viewBox="0 0 200 200"
         fill="none"
       >
@@ -20,9 +20,9 @@ export default function LoginPage() {
       </svg>
 
       <div className="relative w-full max-w-sm">
-        <div className="rounded-2xl border border-orange-500/70 bg-[#111116]/90 p-8 shadow-[0_0_40px_-10px_rgba(249,115,22,0.35)] backdrop-blur">
-          <h1 className="text-center text-xl font-extrabold text-white">
-            ITC <span className="text-orange-500">Resources</span> Portal
+        <div className="rounded-2xl border border-[#FD6E59]/60 bg-[#111116]/90 p-8 shadow-[0_0_40px_-10px_rgba(253,110,89,0.35)] backdrop-blur">
+          <h1 className="text-center text-2xl font-extrabold text-white">
+            ITC <span className="text-[#FD6E59]">Resources</span> Portal
           </h1>
           <p className="mt-2 text-center text-xs leading-relaxed text-gray-400">
             Sign in to submit projects, request institute resources and track
@@ -31,7 +31,7 @@ export default function LoginPage() {
 
           <button
             onClick={() => navigate("/")}
-            className="mt-6 w-full rounded-full bg-orange-500 py-3 text-xs font-bold tracking-wide text-white transition-colors hover:bg-orange-600"
+            className="mt-6 w-full rounded-full bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] py-3 text-xs font-bold tracking-wide text-white transition-transform hover:scale-[1.01]"
           >
             LOGIN WITH SSO
           </button>
@@ -43,8 +43,8 @@ export default function LoginPage() {
           </div>
 
           <button
-            onClick={() => navigate("/not-admin")}
-            className="w-full rounded-full bg-white py-3 text-xs font-bold tracking-wide text-orange-600 transition-colors hover:bg-gray-100"
+            onClick={() => navigate("/admin-dashboard")}
+            className="w-full rounded-full border-2 border-[#FD6E59] bg-white py-3 text-xs font-bold tracking-wide text-black transition-colors hover:bg-gray-100"
           >
             ADMIN LOGIN
           </button>

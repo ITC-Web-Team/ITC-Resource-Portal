@@ -4,12 +4,6 @@
 @tailwind components;
 @tailwind utilities; */
 
-/* :root{
-    --font-inter:"Inter", sans-serif;
-    --font-outfit:"Outfit","Inter",sans-serif;
-    --font-roboto: "Roboto", "Inter", sans-serif;
-} */
-
 @theme{
     --color-bg:#070B14;
     --color-orange:#FD6E59;
@@ -40,4 +34,3 @@ input:-webkit-autofill:focus {
   -webkit-text-fill-color: white !important;
   transition: background-color 9999s ease-in-out 0s;
 }
-/* ITC Resources Portal */
