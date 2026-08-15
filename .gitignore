@@ -17,6 +17,9 @@ server/.env
 # React (for later, when client/ has code)
 client/node_modules/
 client/build/
+find-your-team/node_modules/
+find-your-team/.next/
+find-your-team/.env*
 
 server/venv/
 server/__pycache__/
@@ -28,3 +31,28 @@ server/.env
 .DS_Store
 client/node_modules/
 client/build/
+
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+
+# Environment
+.env
+
+# Django
+*.sqlite3
+
+# Frontend
+Frontend/node_modules/
+Frontend/dist/
+
+# Logs
+runlogs/
+
+# VS Code
+.vscode/

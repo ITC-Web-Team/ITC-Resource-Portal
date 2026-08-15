@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Mail, Phone, CheckCircle2 } from "lucide-react";
 import { fetchProfile, fetchMentor, fetchMyProjects } from "../js/UserApi";
+import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
 
 const navLinks = [
   { label: "Home", id: "home" },
   { label: "How it works", id: "how-it-works" },
-  { label: "Find Team", id: "find-team" },
+  { label: "Find Team", id: "find-team", href: FIND_YOUR_TEAM_URL },
 ];
 
 const MOCK_USER = {
@@ -97,9 +98,21 @@ export default function MyProfilePage() {
 
           <nav className="hidden items-center justify-center gap-14 text-sm font-medium text-gray-300 md:flex">
             {navLinks.map((link) => (
-              <Link key={link.id} to="/" className="transition-colors hover:text-white">
-                {link.label}
-              </Link>
+              link.href ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link key={link.id} to="/" className="transition-colors hover:text-white">
+                  {link.label}
+                </Link>
+              )
             ))}
           </nav>
 

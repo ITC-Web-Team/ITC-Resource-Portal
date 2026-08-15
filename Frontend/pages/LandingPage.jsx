@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Plus, Lightbulb } from "lucide-react";
+import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
 
 const steps = [
   {
@@ -27,7 +28,7 @@ const steps = [
 const navLinks = [
   { label: "Home", id: "home" },
   { label: "How it works", id: "how-it-works" },
-  { label: "Find Team", id: "find-team" },
+  { label: "Find Team", id: "find-team", href: FIND_YOUR_TEAM_URL },
 ];
 
 export default function LandingPage() {
@@ -51,13 +52,25 @@ export default function LandingPage() {
 
           <nav className="hidden items-center justify-center gap-14 text-sm font-medium text-gray-300 md:flex">
             {navLinks.map((link) => (
-              <button
-                key={link.id}
-                onClick={() => scrollTo(link.id)}
-                className="transition-colors hover:text-white"
-              >
-                {link.label}
-              </button>
+              link.href ? (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <button
+                  key={link.id}
+                  onClick={() => scrollTo(link.id)}
+                  className="transition-colors hover:text-white"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
           </nav>
 
@@ -140,10 +153,15 @@ export default function LandingPage() {
             <p className="max-w-md text-2xl font-semibold leading-snug text-black sm:text-[32px]">
               Great projects start with the right team.
             </p>
-            <button className="flex shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-[#FD6E59] bg-white px-8 py-4 text-base font-extrabold tracking-wide text-black shadow-[inset_0px_2px_15px_rgba(0,0,0,0.05)] transition-transform hover:scale-[1.03]">
+            <a
+              href={FIND_YOUR_TEAM_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="flex shrink-0 items-center justify-center gap-2 rounded-lg border-2 border-[#FD6E59] bg-white px-8 py-4 text-base font-extrabold tracking-wide text-black shadow-[inset_0px_2px_15px_rgba(0,0,0,0.05)] transition-transform hover:scale-[1.03]"
+            >
               Find Your Team
               <ArrowRight size={18} strokeWidth={3} />
-            </button>
+            </a>
           </div>
         </section>
       </div>

@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
+import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
 
-const navLinks = ["Home","How it Works","Find Team"]
+const navLinks = [
+    { label: "Home", href: "#" },
+    { label: "How it Works", href: "#" },
+    { label: "Find Team", href: FIND_YOUR_TEAM_URL, external: true },
+]
 
 export default function Navbar(){
     return(
@@ -19,8 +24,14 @@ export default function Navbar(){
 
           <nav className="hidden items-center gap-12 text-sm text-gray-300 md:flex pl-150 mr-12 ">
             {navLinks.map((link) => (
-              <a key={link} href="#" className="transition-colors hover:text-white">
-                {link}
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noreferrer" : undefined}
+                className="transition-colors hover:text-white"
+              >
+                {link.label}
               </a>
             ))}
           </nav>
