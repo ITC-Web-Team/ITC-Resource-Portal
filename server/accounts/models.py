@@ -25,7 +25,7 @@ class Profile(models.Model):
     )
     is_sso_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True) 
 
     class Meta:
         ordering = ["name"]
@@ -38,3 +38,9 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.roll_no})"
+
+class AdminAccess(models.Model):
+    roll_no = models.CharField(max_length=30, unique=True)
+
+    def __str__(self):
+        return self.roll_no
