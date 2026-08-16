@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import get_user_model, login
 import requests
 
-from .models import UserProfile, AdminAccess
+from .models import Profile, AdminAccess
 
 
 PROJECT_ID = "4b68cd3f-f0d3-4a47-8066-09942cad8e82"
@@ -31,6 +31,7 @@ def admin_login(request):
 
 def sso_callback(request):
 
+    # Get temporary access ID returned by SSO
     session_key = request.GET.get("accessid")
 
     if not session_key:
@@ -39,6 +40,7 @@ def sso_callback(request):
             status=400
         )
 
+    # Get user information from SSO
     user_data = get_user_data(session_key)
 
     if not user_data:
@@ -47,43 +49,45 @@ def sso_callback(request):
             status=400
         )
 
+    # Information received from SSO
     roll_no = user_data["roll"]
+    name = user_data["name"]
     email = f"{roll_no}@iitb.ac.in"
+
+    # Check whether this roll number is allowed to access admin page
+    is_admin = AdminAccess.objects.filter(
+        roll_no=roll_no
+    ).exists()
 
     # Create or update Django User
     user, created = User.objects.update_or_create(
         email=email,
         defaults={
             "username": roll_no,
-            "first_name": user_data["name"],
+            "first_name": name,
         }
     )
 
-    # Check whether the roll number is authorized for admin access
-    is_admin = AdminAccess.objects.filter(
-        roll_no=roll_no
-    ).exists()
-
-    # Set role
-    if is_admin:
-        user.role = User.Role.ADMIN
-    else:
-        user.role = User.Role.STUDENT
-
-    user.save()
-
-    # Create or update UserProfile
-    UserProfile.objects.update_or_create(
+    # Create or update Profile
+    profile, created = Profile.objects.update_or_create(
         user=user,
         defaults={
+            "name": name,
             "roll_no": roll_no,
+            "email": email,
             "department": user_data.get("department", ""),
             "degree": user_data.get("degree", ""),
             "passing_year": user_data.get("passing_year"),
+            "role": (
+                Profile.Role.ADMIN
+                if is_admin
+                else Profile.Role.USER
+            ),
+            "is_sso_verified": True,
         }
     )
 
-    # Django session
+    # Log the user into Django's session
     login(request, user)
 
     # Store SSO information in session
@@ -91,7 +95,7 @@ def sso_callback(request):
     request.session["user_data"] = user_data
 
     # Redirect according to role
-    if user.role == User.Role.ADMIN:
+    if profile.role == Profile.Role.ADMIN:
         return redirect("http://localhost:3000/admin")
 
     return redirect("http://localhost:3000")
