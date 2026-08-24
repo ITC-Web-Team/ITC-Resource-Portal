@@ -15,9 +15,15 @@ class Project(models.Model):
     )
     title = models.CharField(max_length=255)
     problem_statement = models.TextField()
+    domain = models.CharField(max_length=120, blank=True)
     tentative_timeline = models.CharField(max_length=120)
+    team_size = models.PositiveSmallIntegerField(blank=True, null=True)
     budget_needed = models.DecimalField(max_digits=12, decimal_places=2)
-    contact_info = models.CharField(max_length=255)
+    budget_breakdown = models.TextField(blank=True)
+    contact_info = models.CharField(max_length=255, blank=True)
+    contact_email = models.EmailField(blank=True)
+    contact_phone = models.CharField(max_length=20, blank=True)
+    team_lead_name = models.CharField(max_length=150, blank=True)
     status = models.CharField(
         max_length=20,
         choices=Status.choices,

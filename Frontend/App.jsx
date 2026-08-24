@@ -6,6 +6,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import MyProfilePage from "./pages/MyProfilePage";
 import ExploreProjectsPage from "./pages/Exploreprojectspage";
 import CreateProjectPage from "./pages/CreateProjectPage";
+import ProjectDetailsPage from "./pages/ProjectDetailsPage";
 
 export default function App() {
   return (
@@ -17,7 +18,8 @@ export default function App() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/profile" element={<MyProfilePage />} />
         <Route path="/explore" element={<ExploreProjectsPage />} />
-        <Route path="/create-project" element={<CreateProjectPage/>} />
+        <Route path="/project/:projectId" element={<ProjectDetailsPage />} />
+        <Route path="/create-project" element={<CreateProjectPage />} />
       </Routes>
     </BrowserRouter>
   );

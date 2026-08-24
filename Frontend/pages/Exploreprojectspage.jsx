@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Search, Plus } from "lucide-react";
 import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
+import { fetchProjects } from "../js/projectApi";
 
 const navLinks = [
   { label: "Home", id: "home" },
@@ -8,46 +10,73 @@ const navLinks = [
   { label: "Find Team", id: "find-team", href: FIND_YOUR_TEAM_URL },
 ];
 
-const projects = [
-  {
-    id: 1,
-    title: "AI-powered Crop Disease Detector",
-    category: "AI / ML",
-    desc: "Detect crop diseases early using computer vision and help farmers act in time.",
-  },
-  {
-    id: 2,
-    title: "Campus Ride Sharing App",
-    category: "Mobile",
-    desc: "A ride pooling app for students to share cabs and autos within campus.",
-  },
-  {
-    id: 3,
-    title: "Smart Attendance System",
-    category: "IoT",
-    desc: "Facial recognition based attendance system for classrooms and labs.",
-  },
-  {
-    id: 4,
-    title: "Peer Notes Marketplace",
-    category: "Web",
-    desc: "A platform for students to share and sell class notes and study material.",
-  },
-  {
-    id: 5,
-    title: "Mental Health Companion",
-    category: "AI / ML",
-    desc: "A chat based companion app that supports student mental wellbeing.",
-  },
-  {
-    id: 6,
-    title: "Hostel Complaint Tracker",
-    category: "Web",
-    desc: "Track and resolve hostel maintenance complaints with real time status.",
-  },
-];
+function matchesSearch(project, searchTerm) {
+  const haystack = [
+    project.title,
+    project.domain,
+    project.problem_statement,
+    project.created_by_name,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  return haystack.includes(searchTerm.toLowerCase());
+}
+
+function summarize(text) {
+  if (!text) {
+    return "No description shared yet.";
+  }
+
+  if (text.length <= 140) {
+    return text;
+  }
+
+  return `${text.slice(0, 137)}...`;
+}
 
 export default function ExploreProjectsPage() {
+  const [projects, setProjects] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProjects() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const data = await fetchProjects();
+
+        if (!cancelled) {
+          setProjects(data);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || "Failed to load projects");
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadProjects();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const filteredProjects = projects.filter((project) =>
+    matchesSearch(project, search),
+  );
+
   return (
     <div className="min-h-screen w-full bg-[#0a0a0f] text-white relative overflow-hidden">
       <div className="pointer-events-none fixed -top-40 -left-40 h-96 w-96 rounded-full bg-[#FD6E59]/20 blur-3xl" />
@@ -92,15 +121,20 @@ export default function ExploreProjectsPage() {
         <section className="px-6 pt-10 md:px-16">
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
-              <Search size={16} className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search
+                size={16}
+                className="pointer-events-none absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
+              />
               <input
                 type="text"
-                placeholder="search projects , field, skills....."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="search projects, fields, skills..."
                 className="w-full rounded-lg bg-[#585A72]/50 py-4 pl-12 pr-4 text-sm text-white placeholder:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FD6E59]/60"
               />
             </div>
             <Link
-              to="/login"
+              to="/create-project"
               className="flex shrink-0 items-center justify-center gap-2 rounded-lg bg-[#FD6E59] px-8 py-4 text-sm font-extrabold tracking-wide text-white transition-transform hover:scale-[1.02]"
             >
               <Plus size={16} strokeWidth={3} />
@@ -117,28 +151,46 @@ export default function ExploreProjectsPage() {
             Find a project that matches your skills and interest
           </p>
 
+          {error && (
+            <p className="mt-8 rounded-lg border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+              {error}
+            </p>
+          )}
+
           <div className="mt-14 grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <div key={project.id} className="relative">
-                <div className="flex h-64 flex-col justify-between rounded-xl border border-white/20 p-6">
-                  <div>
-                    <span className="inline-block rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-300">
-                      {project.category}
-                    </span>
-                    <h3 className="mt-4 text-lg font-bold text-white">{project.title}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-gray-400">
-                      {project.desc}
-                    </p>
+            {loading ? (
+              <p className="text-sm text-gray-400">Loading approved projects...</p>
+            ) : filteredProjects.length === 0 ? (
+              <p className="text-sm text-gray-400">
+                No projects matched your search yet.
+              </p>
+            ) : (
+              filteredProjects.map((project) => (
+                <div key={project.id} className="relative">
+                  <div className="flex h-64 flex-col justify-between rounded-xl border border-white/20 p-6">
+                    <div>
+                      <span className="inline-block rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-300">
+                        {project.domain || "General"}
+                      </span>
+                      <h3 className="mt-4 text-lg font-bold text-white">{project.title}</h3>
+                      <p className="mt-2 text-sm leading-relaxed text-gray-400">
+                        {summarize(project.problem_statement)}
+                      </p>
+                    </div>
+
+                    <div className="pt-4 text-xs font-medium uppercase tracking-wide text-gray-500">
+                      By {project.created_by_name || "ITC student"}
+                    </div>
                   </div>
+                  <Link
+                    to={`/project/${project.id}`}
+                    className="absolute -bottom-5 left-6 rounded-lg bg-[#FD6E59] px-5 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-lg transition-transform hover:scale-[1.03]"
+                  >
+                    View details
+                  </Link>
                 </div>
-                <Link
-                  to={`/project/${project.id}`}
-                  className="absolute -bottom-5 left-6 rounded-lg bg-[#FD6E59] px-5 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-lg transition-transform hover:scale-[1.03]"
-                >
-                  View details
-                </Link>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </section>
       </div>
