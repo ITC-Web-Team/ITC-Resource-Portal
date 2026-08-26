@@ -30,7 +30,9 @@ export default function LoginPage() {
           </p>
 
           <button
-            onClick={() => navigate("/")}
+            onClick={() => {
+  window.location.href = "http://localhost:8000/accounts/login/";
+}}
             className="mt-6 w-full rounded-full bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] py-3 text-xs font-bold tracking-wide text-white transition-transform hover:scale-[1.01]"
           >
             LOGIN WITH SSO
