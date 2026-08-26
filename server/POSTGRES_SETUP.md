@@ -9,7 +9,7 @@ Open `server/.env` and set:
 ```env
 POSTGRES_DB=itc_resource_portal
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_actual_postgres_password
+POSTGRES_PASSWORD=DM@952122
 POSTGRES_HOST=127.0.0.1
 POSTGRES_PORT=5432
 ```
