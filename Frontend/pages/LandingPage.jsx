@@ -75,7 +75,7 @@ export default function LandingPage() {
           </nav>
 
           <Link
-            to="/profile"
+            to="/login"
             className="justify-self-end rounded-md border border-[#FD6E59] px-5 py-2.5 text-xs font-extrabold tracking-wide text-white transition-colors hover:bg-[#FD6E59] hover:text-black"
           >
             MY PROFILE
