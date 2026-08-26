@@ -45,7 +45,10 @@ export default function LoginPage() {
           </div>
 
           <button
-            onClick={() => navigate("/admin-dashboard")}
+            onClick={() => {
+    window.location.href =
+      "http://localhost:8000/accounts/admin-login/";
+  }}
             className="w-full rounded-full border-2 border-[#FD6E59] bg-white py-3 text-xs font-bold tracking-wide text-black transition-colors hover:bg-gray-100"
           >
             ADMIN LOGIN
