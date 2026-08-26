@@ -96,9 +96,9 @@ def sso_callback(request):
 
     # Redirect according to role
     if profile.role == Profile.Role.ADMIN:
-        return redirect("http://localhost:3000/admin")
+        return redirect("http://localhost:3000/admin-dashboard")
 
-    return redirect("http://localhost:3000")
+    return redirect("http://localhost:3000/not-admin")
 
 
 # ------------ GET USER DATA FROM SSO ------------
