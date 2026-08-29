@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { ArrowRight, Plus, Lightbulb } from "lucide-react";
 import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
 
@@ -32,6 +32,7 @@ const navLinks = [
 ];
 
 export default function LandingPage() {
+  const navigate = useNavigate();
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -74,12 +75,29 @@ export default function LandingPage() {
             ))}
           </nav>
 
-          <Link
-            to="/login"
-            className="justify-self-end rounded-md border border-[#FD6E59] px-5 py-2.5 text-xs font-extrabold tracking-wide text-white transition-colors hover:bg-[#FD6E59] hover:text-black"
-          >
-            MY PROFILE
-          </Link>
+                   <button
+  onClick={async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/profile/me/",
+        {
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        navigate("/profile");
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      navigate("/login");
+    }
+  }}
+  className="justify-self-end rounded-md border border-[#FD6E59] px-5 py-2.5 text-xs font-extrabold tracking-wide text-white transition-colors hover:bg-[#FD6E59] hover:text-black"
+>
+  MY PROFILE
+</button>
         </header>
 
         <section id="home" className="scroll-mt-24 px-6 pb-16 pt-16 md:px-16 md:pt-20">
