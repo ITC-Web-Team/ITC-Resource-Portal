@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/projects/", ProjectListCreateView.as_view()),
     path("api/projects/my/", MyProjectListView.as_view()),
     path("api/projects/<int:pk>/", ProjectDetailView.as_view()),
+    path("api/", include("projects.urls")),
 
     # Project reviews
     path(
