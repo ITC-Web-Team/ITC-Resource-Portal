@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
 
 function getCookie(name) {
   const cookies = document.cookie ? document.cookie.split("; ") : [];
@@ -50,13 +50,13 @@ async function request(path, options = {}) {
 }
 
 export function fetchProfile() {
-  return request("/profile/me");
+  return request("/profile/me/");
 }
 
 export function fetchMentor() {
-  return request("/profile/mentor");
+  return request("/profile/mentor/");
 }
 
 export function fetchMyProjects() {
-  return request("/profile/projects");
+  return request("/profile/projects/");
 }
