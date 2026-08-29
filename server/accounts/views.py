@@ -5,8 +5,13 @@ import requests
 
 from .models import Profile, AdminAccess
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
-PROJECT_ID = "4b68cd3f-f0d3-4a47-8066-09942cad8e82"
+from projects.models import Project
+
+PROJECT_ID = "c47cea34-b749-4662-baaa-a26f1045ebfe"
 
 User = get_user_model()
 
@@ -14,6 +19,7 @@ User = get_user_model()
 # ------------ STUDENT LOGIN via SSO ------------
 
 def sso_login(request):
+    request.session["login_type"] = "user"
     return redirect(
         f"https://sso.tech-iitb.org/project/{PROJECT_ID}/ssocall/"
     )
@@ -22,6 +28,7 @@ def sso_login(request):
 # ------------ ADMIN LOGIN via SSO ------------
 
 def admin_login(request):
+    request.session["login_type"] = "admin"    
     return redirect(
         f"https://sso.tech-iitb.org/project/{PROJECT_ID}/ssocall/"
     )
@@ -53,7 +60,7 @@ def sso_callback(request):
     roll_no = user_data["roll"]
     name = user_data["name"]
     email = f"{roll_no}@iitb.ac.in"
-
+    login_type = request.session.get("login_type")
     # Check whether this roll number is allowed to access admin page
     is_admin = AdminAccess.objects.filter(
         roll_no=roll_no
@@ -95,12 +102,13 @@ def sso_callback(request):
     request.session["user_data"] = user_data
 
     # Redirect according to role
-    if profile.role == Profile.Role.ADMIN:
-        return redirect("http://localhost:3000/admin-dashboard")
+    if login_type == "admin":
+        if is_admin:
+            return redirect("http://localhost:5173/admin-dashboard")
+        else:
+            return redirect("http://localhost:5173/not-admin")
 
-    return redirect("http://localhost:3000/not-admin")
-
-
+    return redirect("http://localhost:5173/profile") 
 # ------------ GET USER DATA FROM SSO ------------
 
 def get_user_data(session_key):
@@ -119,3 +127,96 @@ def get_user_data(session_key):
 
     except requests.RequestException:
         return None
+
+# ------------ CURRENT USER PROFILE ------------
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_profile(request):
+    profile = request.user.profile
+
+    return Response({
+        "name": profile.name,
+        "initials": "".join(
+            word[0] for word in profile.name.split()[:2]
+        ).upper(),
+        "rollNo": profile.roll_no,
+        "branch": profile.degree,
+        "year": profile.passing_year,
+        "email": profile.email,
+        "phone": "",
+        "is_sso_verified": profile.is_sso_verified,
+    })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_mentor(request):
+    profile = request.user.profile
+
+    project = (
+        Project.objects
+        .filter(created_by=profile)
+        .exclude(team_lead_name="")
+        .first()
+    )
+
+    if not project:
+        return Response({
+            "name": "",
+            "initials": "",
+            "role": "",
+            "email": "",
+            "phone": "",
+        })
+
+    mentor_name = project.team_lead_name.strip()
+
+    return Response({
+        "name": mentor_name,
+        "initials": "".join(
+            word[0] for word in mentor_name.split()[:2]
+        ).upper(),
+        "role": "Team Lead / Mentor",
+        "email": project.contact_email,
+        "phone": project.contact_phone,
+    })
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_projects(request):
+    profile = request.user.profile
+
+    projects = Project.objects.filter(
+        created_by=profile
+    )
+
+    data = []
+
+    for project in projects:
+        review = getattr(project, "review", None)
+
+        data.append({
+            "id": project.id,
+            "title": project.title,
+            "category": project.domain,
+            "deadline": (
+                review.live_deadline.strftime("%b %d, %Y")
+                if review and review.live_deadline
+                else ""
+            ),
+            "status": project.status.upper(),
+            "allotted": (
+                f"₹{review.approved_budget:,.0f}"
+                if review and review.approved_budget is not None
+                else "₹0"
+            ),
+            "timeline": (
+                review.approved_timeline
+                if review and review.approved_timeline
+                else project.tentative_timeline
+            ),
+            "period": project.tentative_timeline,
+            "progress": 0,
+        })
+
+    return Response(data)
