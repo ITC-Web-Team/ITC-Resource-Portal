@@ -37,7 +37,7 @@ export default function Navbar(){
           </nav>
 
           <Link
-            to="/login"
+            to="/profile"
             className="rounded-md border border-white/70 px-4 py-2 text-xs font-semibold tracking-wide text-white transition-colors hover:bg-white hover:text-black"
           >
             MY PROFILE
