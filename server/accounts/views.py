@@ -104,11 +104,11 @@ def sso_callback(request):
     # Redirect according to role
     if login_type == "admin":
         if is_admin:
-            return redirect("http://localhost:5173/admin-dashboard")
+            return redirect("http://127.0.0.1:5173/admin-dashboard")
         else:
-            return redirect("http://localhost:5173/not-admin")
+            return redirect("http://127.0.0.1:5173/not-admin")
 
-    return redirect("http://localhost:5173/profile") 
+    return redirect("http://127.0.0.1:5173/profile") 
 # ------------ GET USER DATA FROM SSO ------------
 
 def get_user_data(session_key):
@@ -220,3 +220,23 @@ def my_projects(request):
         })
 
     return Response(data)
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def check_admin(request):
+    profile = Profile.objects.filter(
+        user=request.user
+    ).first()
+
+    if not profile:
+        return Response({
+            "is_admin": False
+        })
+
+    is_admin = AdminAccess.objects.filter(
+        roll_no=profile.roll_no
+    ).exists()
+
+    return Response({
+        "is_admin": is_admin
+    })
