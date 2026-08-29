@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 from projects.models import Project
 
-PROJECT_ID = "c47cea34-b749-4662-baaa-a26f1045ebfe"
+PROJECT_ID = "38da6e30-2b15-43f2-bdf7-41c8e9d12583"
 
 User = get_user_model()
 
