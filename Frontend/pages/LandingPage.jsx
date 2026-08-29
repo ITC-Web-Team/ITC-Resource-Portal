@@ -36,7 +36,24 @@ export default function LandingPage() {
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+  const handleCreateProject = async () => {
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/api/profile/me/",
+      {
+        credentials: "include",
+      }
+    );
 
+    if (response.ok) {
+      navigate("/create-project");
+    } else {
+      navigate("/login");
+    }
+  } catch (error) {
+    navigate("/login");
+  }
+};
   return (
     <div className="min-h-screen w-full bg-[#0a0a0f] text-white flex flex-col relative overflow-hidden">
       <div className="pointer-events-none fixed -top-40 -left-40 h-96 w-96 rounded-full bg-[#FD6E59]/20 blur-3xl" />
@@ -79,7 +96,7 @@ export default function LandingPage() {
   onClick={async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/profile/me/",
+        "http://127.0.0.1:8000/api/profile/me/",
         {
           credentials: "include",
         }
