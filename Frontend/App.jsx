@@ -7,6 +7,8 @@ import MyProfilePage from "./pages/MyProfilePage";
 import ExploreProjectsPage from "./pages/Exploreprojectspage";
 import CreateProjectPage from "./pages/CreateProjectPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
+import AdminRoute from "./pages/adminroute";
+import AdminProjectDetailsPage from "./pages/AdminProjectDetailsPage";
 
 export default function App() {
   return (
@@ -15,7 +17,17 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/not-admin" element={<AdminPage />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin-dashboard" element={
+    <AdminRoute>
+      <AdminDashboard />
+    </AdminRoute>
+  } />
+        <Route path="/admin/project/:id" element={
+    <AdminRoute>
+      <AdminProjectDetailsPage />
+    </AdminRoute>
+  }
+/>
         <Route path="/profile" element={<MyProfilePage />} />
         <Route path="/explore" element={<ExploreProjectsPage />} />
         <Route path="/project/:projectId" element={<ProjectDetailsPage />} />
