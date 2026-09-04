@@ -1,4 +1,6 @@
 from django.http import HttpResponse
+from django.contrib.auth import logout
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model, login
 import requests
@@ -148,6 +150,20 @@ def my_profile(request):
         "is_sso_verified": profile.is_sso_verified,
     })
 
+ # ------------ CURRENT USER logout ------------
+def logout_view(request):
+    logout(request)
+
+    response = JsonResponse({
+        "message": "Logged out successfully"
+    })
+
+    # Clear Django session cookie
+    response.delete_cookie("sessionid")
+
+    return response
+
+
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def my_mentor(request):
@@ -240,3 +256,10 @@ def check_admin(request):
     return Response({
         "is_admin": is_admin
     })
+
+
+
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({"message": "Logged out successfully"})

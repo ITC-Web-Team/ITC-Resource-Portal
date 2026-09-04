@@ -2,14 +2,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticated
 
-from accounts.models import AdminAccess, Profile 
-
-
-from .models import Project
-from rest_framework import generics, permissions
-from rest_framework.exceptions import PermissionDenied
+from accounts.models import AdminAccess, Profile
 
 from .models import Project, ProjectReview
 from .serializers import (

@@ -69,6 +69,11 @@ export default function CreateProjectPage() {
       });
 
       setSuccess("Project submitted for review.");
+      
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+     });
       setForm(initialForm);
     } catch (err) {
       setError(normalizeError(err.message));
