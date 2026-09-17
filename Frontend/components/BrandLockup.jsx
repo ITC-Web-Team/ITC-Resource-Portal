@@ -1,4 +1,4 @@
-export default function BrandLockup({ iconClassName = "h-14" }) {
+export default function BrandLockup({ iconClassName = "h-11" }) {
   return (
     <img
       src="/logo.png"
