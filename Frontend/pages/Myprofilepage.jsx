@@ -163,9 +163,7 @@ export default function MyProfilePage() {
 
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <span className="text-xl font-extrabold tracking-tight">
-              itc
-            </span>
+            <img src="/logo.png" alt="ITC" className="h-9 w-9" />
 
             <span className="ml-1 text-lg font-extrabold text-[#FD6E59] sm:text-xl">
               Resources portal

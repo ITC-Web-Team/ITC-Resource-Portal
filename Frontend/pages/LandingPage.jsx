@@ -1,5 +1,5 @@
 import { Link,useNavigate } from "react-router-dom";
-import { ArrowRight, Plus, Lightbulb } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
 import { BASE_URL } from "../js/apiClient";
 
@@ -62,8 +62,7 @@ export default function LandingPage() {
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col">
         <header className="grid grid-cols-[auto_1fr_auto] items-center gap-6 px-6 py-6 md:px-16">
           <div className="flex items-center gap-2">
-            <Lightbulb className="h-6 w-6 text-[#FD6E59]" strokeWidth={2} />
-            <span className="text-xl font-extrabold tracking-tight">itc</span>
+            <img src="/logo.png" alt="ITC" className="h-9 w-9" />
             <span className="ml-1 text-lg font-extrabold text-[#FD6E59] sm:text-xl">
               Resources portal
             </span>

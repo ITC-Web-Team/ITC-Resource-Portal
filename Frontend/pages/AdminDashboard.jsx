@@ -84,8 +84,8 @@ export default function AdminDashboard() {
       <div className="relative flex min-h-screen flex-col">
   
         <header className="flex items-center justify-between py-6">
-          <div className="flex items-baseline gap-2">
-            <span className="text-xl font-extrabold tracking-tight">itc</span>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="ITC" className="h-9 w-9" />
             <span className="text-lg font-extrabold text-[#FD6E59]">Resources portal</span>
           </div>
 
