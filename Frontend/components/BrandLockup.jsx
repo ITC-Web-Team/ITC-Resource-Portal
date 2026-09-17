@@ -1,18 +1,13 @@
-export default function BrandLockup({ iconClassName = "h-8" }) {
+export default function BrandLockup({ iconClassName = "h-9" }) {
   return (
-    <span className="flex items-center gap-2.5">
+    <span className="flex items-center gap-3">
       <img
         src="/logo-icon.png"
-        alt=""
+        alt="itc"
         className={`${iconClassName} w-auto shrink-0`}
       />
-      <span className="flex items-baseline gap-2">
-        <span className="text-xl font-extrabold tracking-tight text-white">
-          itc
-        </span>
-        <span className="hidden text-[11px] font-bold uppercase tracking-[0.15em] text-[#FD6E59] sm:inline">
-          Resources Portal
-        </span>
+      <span className="hidden text-sm font-extrabold uppercase tracking-[0.2em] text-[#FD6E59] sm:inline">
+        Resources Portal
       </span>
     </span>
   );

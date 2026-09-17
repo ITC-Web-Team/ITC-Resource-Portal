@@ -24,32 +24,32 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0a0f]/80 shadow-lg shadow-black/20 backdrop-blur-md">
-            <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-6 px-6 py-4 md:px-12">
+        <div className="sticky top-0 z-20 px-4 pt-4">
+            <header className="mx-auto flex max-w-6xl items-center justify-between gap-4 rounded-2xl border border-white/10 bg-[#111116]/90 px-5 py-3 shadow-xl shadow-black/40 backdrop-blur-md">
 
                 <Link to="/" className="transition-opacity hover:opacity-80">
                     <BrandLockup />
                 </Link>
 
-                <nav className="hidden items-center justify-center gap-10 text-sm font-medium text-gray-300 md:flex">
+                <nav className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 p-1 text-xs font-bold tracking-wide text-gray-300 md:flex">
                     {navLinks.map((link) => (
                         <a
                             key={link.label}
                             href={link.href}
                             target={link.external ? "_blank" : undefined}
                             rel={link.external ? "noreferrer" : undefined}
-                            className="relative py-1 transition-colors hover:text-white after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-[#FD6E59] after:transition-all after:duration-200 hover:after:w-full"
+                            className="rounded-full px-4 py-2 transition-colors hover:bg-white/10 hover:text-white"
                         >
                             {link.label}
                         </a>
                     ))}
                 </nav>
 
-                <div className="flex items-center justify-end gap-3">
+                <div className="flex items-center gap-2.5">
 
                     <Link
                         to="/profile"
-                        className="rounded-md border-2 border-[#FD6E59] px-4 py-2 text-xs font-bold tracking-wide text-white transition-colors hover:bg-[#FD6E59]"
+                        className="rounded-full bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] px-5 py-2.5 text-xs font-extrabold tracking-wide text-white shadow-md shadow-black/20 transition-transform hover:scale-[1.03]"
                     >
                         MY PROFILE
                     </Link>
@@ -57,14 +57,14 @@ export default function Navbar() {
                     {showLogout && (
                         <button
                             onClick={handleLogout}
-                            className="rounded-md border-2 border-red-500 px-4 py-2 text-xs font-bold tracking-wide text-red-500 transition-colors hover:bg-red-500 hover:text-white"
+                            className="rounded-full border-2 border-red-500 px-5 py-2.5 text-xs font-extrabold tracking-wide text-red-500 transition-colors hover:bg-red-500 hover:text-white"
                         >
                             LOGOUT
                         </button>
                     )}
 
                 </div>
-            </div>
-        </header>
+            </header>
+        </div>
     );
 }
