@@ -223,22 +223,59 @@ export default function CreateProjectPage() {
                   </p>
                 </div>
 
-                <div className="mt-6 px-2 sm:px-6">
-                  <Slider.Root
-                    value={[Number(form.budget_needed)]}
-                    max={20000}
-                    min={0}
-                    step={1000}
-                    className="relative flex h-5 w-full items-center"
-                    onValueChange={(value) =>
-                      updateField("budget_needed", value[0] || 0)
-                    }
-                  >
-                    <Slider.Track className="relative h-1.5 w-full rounded-full bg-white1/20">
-                      <Slider.Range className="absolute h-1.5 rounded-full bg-orange" />
-                    </Slider.Track>
-                    <Slider.Thumb className="block h-5 w-5 cursor-pointer rounded-full border-2 border-white1 bg-orange shadow-md outline-none transition-transform hover:scale-110" />
-                  </Slider.Root>
+                <div className="mt-8 px-2 sm:px-6">
+                  <div className="relative pt-8">
+                    <div
+                      className="pointer-events-none absolute top-0 -translate-x-1/2 rounded-md bg-gradient-to-r from-orange-light to-orange px-2.5 py-1 text-xs font-bold text-white shadow-lg shadow-orange/30 transition-all duration-150"
+                      style={{
+                        left: `${(Number(form.budget_needed) / 20000) * 100}%`,
+                      }}
+                    >
+                      ₹{Number(form.budget_needed).toLocaleString("en-IN")}
+                      <span className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-x-4 border-t-4 border-x-transparent border-t-orange" />
+                    </div>
+
+                    <Slider.Root
+                      value={[Number(form.budget_needed)]}
+                      max={20000}
+                      min={0}
+                      step={1000}
+                      className="relative flex h-7 w-full items-center"
+                      onValueChange={(value) =>
+                        updateField("budget_needed", value[0] || 0)
+                      }
+                    >
+                      <Slider.Track className="relative h-3 w-full rounded-full bg-white1/10 shadow-[inset_0_1px_3px_rgba(0,0,0,0.4)]">
+                        <Slider.Range className="absolute h-3 rounded-full bg-gradient-to-r from-orange-light to-orange shadow-[0_0_14px_rgba(253,110,89,0.55)]" />
+                      </Slider.Track>
+                      <Slider.Thumb className="block h-7 w-7 cursor-grab rounded-full border-[3px] border-white1 bg-gradient-to-br from-orange-light to-orange shadow-lg outline-none ring-4 ring-orange/20 transition-transform hover:scale-110 active:cursor-grabbing active:scale-125" />
+                    </Slider.Root>
+
+                    <div className="mt-2 flex justify-between text-[10px] font-semibold text-text-grey">
+                      <span>₹0</span>
+                      <span>₹5k</span>
+                      <span>₹10k</span>
+                      <span>₹15k</span>
+                      <span>₹20k</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {[5000, 10000, 15000, 20000].map((preset) => (
+                      <button
+                        key={preset}
+                        type="button"
+                        onClick={() => updateField("budget_needed", preset)}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-bold transition-colors ${
+                          Number(form.budget_needed) === preset
+                            ? "border-orange bg-orange text-white"
+                            : "border-white1/10 bg-white1/5 text-text-grey hover:border-orange/50 hover:text-white1"
+                        }`}
+                      >
+                        ₹{preset.toLocaleString("en-IN")}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
 
