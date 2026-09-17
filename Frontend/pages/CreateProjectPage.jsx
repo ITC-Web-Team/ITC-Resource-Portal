@@ -219,14 +219,14 @@ export default function CreateProjectPage() {
                     Rs. {Number(form.budget_needed).toLocaleString("en-IN")}
                   </p>
                   <p className="mt-1 text-center text-xs font-semibold text-text-grey">
-                    Drag to adjust · max Rs. 50,000
+                    Drag to adjust · max Rs. 20,000
                   </p>
                 </div>
 
                 <div className="mt-6 px-2 sm:px-6">
                   <Slider.Root
                     value={[Number(form.budget_needed)]}
-                    max={50000}
+                    max={20000}
                     min={0}
                     step={1000}
                     className="relative flex h-5 w-full items-center"
