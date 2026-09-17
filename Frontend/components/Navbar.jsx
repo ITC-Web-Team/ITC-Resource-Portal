@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
+import BrandLockup from "./BrandLockup";
 
 const navLinks = [
     { label: "Home", href: "#" },
@@ -23,14 +24,11 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-md">
+        <header className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0a0f]/80 shadow-lg shadow-black/20 backdrop-blur-md">
             <div className="mx-auto grid max-w-6xl grid-cols-[auto_1fr_auto] items-center gap-6 px-6 py-4 md:px-12">
 
-                <Link to="/" className="flex items-center gap-2">
-                    <img src="/logo.png" alt="ITC" className="h-8 w-8" />
-                    <span className="text-sm font-bold text-orange-500">
-                        Resources Portal
-                    </span>
+                <Link to="/" className="transition-opacity hover:opacity-80">
+                    <BrandLockup />
                 </Link>
 
                 <nav className="hidden items-center justify-center gap-10 text-sm font-medium text-gray-300 md:flex">

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Search } from "lucide-react";
 import { fetchRequests, approveRequest, rejectRequest } from "../js/Adminapi";
+import BrandLockup from "../components/BrandLockup";
 
 const TABS = [
   { label: "Pending requests", status: "pending" },
@@ -84,10 +85,7 @@ export default function AdminDashboard() {
       <div className="relative flex min-h-screen flex-col">
   
         <header className="flex items-center justify-between py-6">
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="ITC" className="h-9 w-9" />
-            <span className="text-lg font-extrabold text-[#FD6E59]">Resources portal</span>
-          </div>
+          <BrandLockup />
 
           <div className="flex items-center gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 text-xs font-bold text-white">

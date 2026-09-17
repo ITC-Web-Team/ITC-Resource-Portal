@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from projects.models import Project, ProjectReview
+from projects.models import Project
 
 User = get_user_model()
 
@@ -178,17 +178,14 @@ def logout_view(request):
 def my_mentor(request):
     profile = request.user.profile
 
-    # The "mentor" is the admin who reviewed/approved one of this user's
-    # projects, not the student-entered team lead (see Project.team_lead_name,
-    # which is shown separately on each project card).
-    review = (
-        ProjectReview.objects
-        .filter(project__created_by=profile)
-        .order_by("-reviewed_at")
-        .first()
-    )
+    # The mentor is the admin who approved this user's first project - set
+    # once (see projects.views.approve_request) and fixed from then on,
+    # even if later projects are reviewed by a different admin. Not the
+    # student-entered team lead (see Project.team_lead_name, shown
+    # separately on each project card).
+    mentor_profile = profile.mentor
 
-    if not review:
+    if not mentor_profile:
         return Response({
             "name": "",
             "initials": "",
@@ -198,7 +195,7 @@ def my_mentor(request):
             "phone": "",
         })
 
-    mentor_name = review.admin_name.strip()
+    mentor_name = mentor_profile.name.strip()
 
     return Response({
         "name": mentor_name,
@@ -206,9 +203,9 @@ def my_mentor(request):
             word[0] for word in mentor_name.split()[:2]
         ).upper() if mentor_name else "",
         "role": "Admin / Mentor",
-        "rollNo": review.admin_roll_no,
-        "email": review.admin_email,
-        "phone": review.admin_phone,
+        "rollNo": mentor_profile.roll_no,
+        "email": mentor_profile.email,
+        "phone": "",
     })
 
 @api_view(["GET"])

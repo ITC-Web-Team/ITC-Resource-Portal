@@ -246,6 +246,13 @@ def approve_request(request, pk):
     project.status = Project.Status.APPROVED
     project.save()
 
+    # The mentor is fixed the first time any of this student's projects
+    # gets approved, and never reassigned afterwards.
+    student_profile = project.created_by
+    if student_profile.mentor_id is None:
+        student_profile.mentor = admin_profile
+        student_profile.save(update_fields=["mentor"])
+
     return JsonResponse({
         "message": "Request approved",
         "id": project.id,

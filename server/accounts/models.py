@@ -23,6 +23,16 @@ class Profile(models.Model):
         choices=Role.choices,
         default=Role.USER,
     )
+    # Set once - the admin who approved this user's first project - and
+    # never changed afterwards, even if later projects are reviewed by a
+    # different admin. See projects.views.approve_request.
+    mentor = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        related_name="mentees",
+        blank=True,
+        null=True,
+    )
     is_sso_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True) 
