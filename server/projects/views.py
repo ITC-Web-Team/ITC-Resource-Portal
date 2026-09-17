@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 
-from accounts.models import AdminAccess, Profile
+from accounts.utils import is_admin_user
 
 from .models import Project, ProjectReview
 from .serializers import (
@@ -14,16 +14,6 @@ from .serializers import (
     ProjectReviewSerializer,
     PublicProjectSerializer,
 )
-
-def is_admin_user(user):
-    try:
-        profile = user.profile
-    except Profile.DoesNotExist:
-        return False
-
-    return AdminAccess.objects.filter(
-        roll_no=profile.roll_no
-    ).exists()
 
 class ProjectListCreateView(generics.ListCreateAPIView):
     queryset = Project.objects.select_related("created_by").all()

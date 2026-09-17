@@ -50,6 +50,9 @@ venv/
 # Frontend
 Frontend/node_modules/
 Frontend/dist/
+Frontend/.env*
+!Frontend/.env.example
+server/staticfiles/
 
 # Logs
 runlogs/

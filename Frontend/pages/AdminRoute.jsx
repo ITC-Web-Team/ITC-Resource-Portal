@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { SERVER_ORIGIN } from "../js/apiClient";
 
 export default function AdminRoute({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/accounts/check-admin/", {
+    fetch(`${SERVER_ORIGIN}/accounts/check-admin/`, {
       credentials: "include",
     })
       .then((res) => {

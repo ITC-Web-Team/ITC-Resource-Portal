@@ -1,15 +1,16 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import { BASE_URL } from "./js/apiClient";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import AdminPage from "./pages/AdminPage";
 import AdminDashboard from "./pages/AdminDashboard";
-import MyProfilePage from "./pages/MyProfilePage";
+import MyProfilePage from "./pages/Myprofilepage";
 import ExploreProjectsPage from "./pages/Exploreprojectspage";
 import CreateProjectPage from "./pages/CreateProjectPage";
 import ProjectDetailsPage from "./pages/ProjectDetailsPage";
-import AdminRoute from "./pages/adminroute";
+import AdminRoute from "./pages/AdminRoute";
 import AdminProjectDetailsPage from "./pages/AdminProjectDetailsPage";
 
 
@@ -25,7 +26,7 @@ function UserRoute({ children }) {
     const checkLogin = async () => {
       try {
         const response = await fetch(
-          "http://127.0.0.1:8000/api/profile/me/",
+          `${BASE_URL}/profile/me/`,
           {
             method: "GET",
             credentials: "include",

@@ -5,8 +5,9 @@ import {
   fetchProfile,
   fetchMentor,
   fetchMyProjects,
-} from "../js/UserApi";
+} from "../js/Userapi";
 import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
+import { SERVER_ORIGIN } from "../js/apiClient";
 
 const navLinks = [
   { label: "Home", id: "home" },
@@ -127,7 +128,7 @@ export default function MyProfilePage() {
       // This logs the user out from Django,
       // not just from localStorage.
       await fetch(
-        "http://127.0.0.1:8000/accounts/logout/",
+        `${SERVER_ORIGIN}/accounts/logout/`,
         {
           method: "GET",
           credentials: "include",

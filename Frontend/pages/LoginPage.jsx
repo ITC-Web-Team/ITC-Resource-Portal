@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { SERVER_ORIGIN } from "../js/apiClient";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function LoginPage() {
 
           <button
             onClick={() => {
-  window.location.href = "http://127.0.0.1:8000/accounts/login/";
+  window.location.href = `${SERVER_ORIGIN}/accounts/login/`;
 }}
             className="mt-6 w-full rounded-full bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] py-3 text-xs font-bold tracking-wide text-white transition-transform hover:scale-[1.01]"
           >
@@ -46,8 +47,7 @@ export default function LoginPage() {
 
           <button
             onClick={() => {
-    window.location.href =
-      "http://127.0.0.1:8000/accounts/admin-login/";
+    window.location.href = `${SERVER_ORIGIN}/accounts/admin-login/`;
   }}
             className="w-full rounded-full border-2 border-[#FD6E59] bg-white py-3 text-xs font-bold tracking-wide text-black transition-colors hover:bg-gray-100"
           >

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import HttpResponse
 from django.contrib.auth import logout
 from django.http import JsonResponse
@@ -6,6 +7,7 @@ from django.contrib.auth import get_user_model, login
 import requests
 
 from .models import Profile, AdminAccess
+from .utils import is_admin_user
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -13,27 +15,25 @@ from rest_framework.response import Response
 
 from projects.models import Project
 
-PROJECT_ID = "38da6e30-2b15-43f2-bdf7-41c8e9d12583"
-
 User = get_user_model()
+
+
+def _sso_call_url():
+    return f"{settings.SSO_BASE_URL}/project/{settings.SSO_PROJECT_ID}/ssocall/"
 
 
 # ------------ STUDENT LOGIN via SSO ------------
 
 def sso_login(request):
     request.session["login_type"] = "user"
-    return redirect(
-        f"https://sso.tech-iitb.org/project/{PROJECT_ID}/ssocall/"
-    )
+    return redirect(_sso_call_url())
 
 
 # ------------ ADMIN LOGIN via SSO ------------
 
 def admin_login(request):
-    request.session["login_type"] = "admin"    
-    return redirect(
-        f"https://sso.tech-iitb.org/project/{PROJECT_ID}/ssocall/"
-    )
+    request.session["login_type"] = "admin"
+    return redirect(_sso_call_url())
 
 
 # ------------ SSO CALLBACK ------------
@@ -59,8 +59,15 @@ def sso_callback(request):
         )
 
     # Information received from SSO
-    roll_no = user_data["roll"]
-    name = user_data["name"]
+    roll_no = user_data.get("roll")
+    name = user_data.get("name")
+
+    if not roll_no or not name:
+        return HttpResponse(
+            "SSO response missing required user fields",
+            status=400
+        )
+
     email = f"{roll_no}@iitb.ac.in"
     login_type = request.session.get("login_type")
     # Check whether this roll number is allowed to access admin page
@@ -106,18 +113,18 @@ def sso_callback(request):
     # Redirect according to role
     if login_type == "admin":
         if is_admin:
-            return redirect("http://127.0.0.1:5173/admin-dashboard")
+            return redirect(f"{settings.FRONTEND_URL}/admin-dashboard")
         else:
-            return redirect("http://127.0.0.1:5173/not-admin")
+            return redirect(f"{settings.FRONTEND_URL}/not-admin")
 
-    return redirect("http://127.0.0.1:5173/profile") 
+    return redirect(f"{settings.FRONTEND_URL}/profile")
 # ------------ GET USER DATA FROM SSO ------------
 
 def get_user_data(session_key):
 
     try:
         response = requests.post(
-            "https://sso.tech-iitb.org/project/getuserdata",
+            f"{settings.SSO_BASE_URL}/project/getuserdata",
             json={"id": session_key},
             timeout=10,
         )
@@ -249,17 +256,6 @@ def check_admin(request):
             "is_admin": False
         })
 
-    is_admin = AdminAccess.objects.filter(
-        roll_no=profile.roll_no
-    ).exists()
-
     return Response({
-        "is_admin": is_admin
+        "is_admin": is_admin_user(request.user)
     })
-
-
-
-
-def logout_view(request):
-    logout(request)
-    return JsonResponse({"message": "Logged out successfully"})

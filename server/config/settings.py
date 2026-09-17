@@ -42,16 +42,27 @@ def load_env_files():
 load_env_files()
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+def _split_env_list(name, default=""):
+    raw = os.getenv(name, default)
+    return [item.strip() for item in raw.split(",") if item.strip()]
+
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%tz#a06jz4h4a2l0^r8e==fps1gz7ia8ttx&f79&z23-i3xxar'
+# In production, DJANGO_SECRET_KEY must be set via the environment (Coolify
+# env vars) - the fallback below is only for local development.
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-%tz#a06jz4h4a2l0^r8e==fps1gz7ia8ttx&f79&z23-i3xxar",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = _split_env_list("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost")
+
+# Coolify (Traefik) terminates TLS and forwards plain HTTP to the container,
+# so Django needs to trust that header to know the original request was HTTPS.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Application definition
@@ -70,8 +81,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-      'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -153,24 +165,54 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CSRF_TRUSTED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
-]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    
-    "http://127.0.0.1:5173",
-]
+
+# The deployed frontend origin (used for CORS/CSRF defaults below and for
+# post-SSO-login redirects). Set FRONTEND_URL in the environment for staging
+# and production deployments (e.g. https://portal.example.org).
+FRONTEND_URL = os.getenv("FRONTEND_URL", "http://127.0.0.1:5173")
+
+CSRF_TRUSTED_ORIGINS = _split_env_list(
+    "CSRF_TRUSTED_ORIGINS",
+    f"http://127.0.0.1:5173,http://localhost:5173,{FRONTEND_URL}",
+)
+CORS_ALLOWED_ORIGINS = _split_env_list(
+    "CORS_ALLOWED_ORIGINS",
+    f"http://127.0.0.1:5173,http://localhost:5173,{FRONTEND_URL}",
+)
 
 CORS_ALLOW_CREDENTIALS = True
+
+# When the frontend and backend are deployed on different Coolify
+# subdomains, the session/csrf cookies are cross-site from the browser's
+# point of view, so they need SameSite=None + Secure over HTTPS in
+# production. Locally (DEBUG=True, plain http://127.0.0.1) that combination
+# would make browsers drop the cookie, so keep Lax + non-secure for dev.
+SESSION_COOKIE_SAMESITE = "Lax" if DEBUG else "None"
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SAMESITE = "Lax" if DEBUG else "None"
+CSRF_COOKIE_SECURE = not DEBUG
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
     ],
 }
+
+# ITC SSO integration (see docs at https://sso.tech-iitb.org/docs/).
+# SSO_PROJECT_ID must be set per-environment via the environment - it is
+# issued per registered SSO project and rotates independently of this repo.
+SSO_BASE_URL = os.getenv("SSO_BASE_URL", "https://sso.tech-iitb.org")
+SSO_PROJECT_ID = os.getenv(
+    "SSO_PROJECT_ID", "38da6e30-2b15-43f2-bdf7-41c8e9d12583"
+)

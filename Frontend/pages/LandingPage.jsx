@@ -1,6 +1,7 @@
 import { Link,useNavigate } from "react-router-dom";
 import { ArrowRight, Plus, Lightbulb } from "lucide-react";
 import { FIND_YOUR_TEAM_URL } from "../js/findYourTeamLink";
+import { BASE_URL } from "../js/apiClient";
 
 const steps = [
   {
@@ -39,7 +40,7 @@ export default function LandingPage() {
   const handleCreateProject = async () => {
   try {
     const response = await fetch(
-      "http://127.0.0.1:8000/api/profile/me/",
+      `${BASE_URL}/profile/me/`,
       {
         credentials: "include",
       }
@@ -96,7 +97,7 @@ export default function LandingPage() {
   onClick={async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/profile/me/",
+        `${BASE_URL}/profile/me/`,
         {
           credentials: "include",
         }
