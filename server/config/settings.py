@@ -203,6 +203,16 @@ SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SAMESITE = "Lax" if DEBUG else "None"
 CSRF_COOKIE_SECURE = not DEBUG
 
+# If the frontend and backend are on different subdomains of the same
+# parent domain (e.g. resource.example.org and api.example.org), set
+# COOKIE_DOMAIN=".example.org" so the browser shares cookies between them -
+# otherwise the frontend's JS can never read the csrftoken cookie, since
+# it would be host-only to the backend's domain. Leave unset for local dev
+# or same-domain deployments.
+COOKIE_DOMAIN = os.getenv("COOKIE_DOMAIN") or None
+SESSION_COOKIE_DOMAIN = COOKIE_DOMAIN
+CSRF_COOKIE_DOMAIN = COOKIE_DOMAIN
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",

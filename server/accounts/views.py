@@ -4,6 +4,7 @@ from django.contrib.auth import logout
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model, login
+from django.views.decorators.csrf import ensure_csrf_cookie
 import requests
 
 from .models import Profile, AdminAccess
@@ -38,6 +39,7 @@ def admin_login(request):
 
 # ------------ SSO CALLBACK ------------
 
+@ensure_csrf_cookie
 def sso_callback(request):
 
     # Get temporary access ID returned by SSO
