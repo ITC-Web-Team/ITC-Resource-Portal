@@ -87,11 +87,11 @@ export default function CreateProjectPage() {
       <Navbar />
 
       <main>
-        <div className="mx-auto mt-10 max-w-3xl text-center">
-          <h1 className="mt-[65px] text-center text-4xl font-bold leading-[1.5] text-orange">
+        <div className="mx-auto mt-16 max-w-3xl text-center">
+          <h1 className="text-4xl font-bold leading-tight text-orange">
             Share your idea
           </h1>
-          <p className="text-m text-left text-text-grey">
+          <p className="mt-3 text-sm leading-relaxed text-text-grey sm:text-base">
             Shape your idea into a clear plan, define the problem, map the
             execution, and show what it will take to bring it to life.
           </p>
@@ -119,7 +119,7 @@ export default function CreateProjectPage() {
                 type="text"
                 value={form.title}
                 onChange={(event) => updateField("title", event.target.value)}
-                className="h-10 w-full rounded-lg bg-box-light p-3 text-s transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
+                className="h-10 w-full rounded-lg bg-box-light p-3 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
                 required
               />
             </div>
@@ -153,7 +153,7 @@ export default function CreateProjectPage() {
               />
             </div>
 
-            <div className="flex flex-row space-x-20">
+            <div className="flex flex-row space-x-10">
               <div className="flex flex-col space-y-4">
                 <label className="text-lg font-bold">Timeline</label>
                 <select
@@ -161,7 +161,7 @@ export default function CreateProjectPage() {
                   onChange={(event) =>
                     updateField("tentative_timeline", event.target.value)
                   }
-                  className="h-10 w-30 rounded-lg bg-box-light pl-1 text-s text-white1"
+                  className="h-10 w-30 rounded-lg bg-box-light pl-1 text-sm text-white1"
                 >
                   <option value="1 month">1 month</option>
                   <option value="2 months">2 months</option>
@@ -176,7 +176,7 @@ export default function CreateProjectPage() {
                 <select
                   value={form.team_size}
                   onChange={(event) => updateField("team_size", event.target.value)}
-                  className="h-10 w-15 rounded-lg bg-box-light pl-1 text-s text-white1"
+                  className="h-10 w-15 rounded-lg bg-box-light pl-1 text-sm text-white1"
                 >
                   <option value="1">1</option>
                   <option value="2">2</option>
@@ -196,7 +196,7 @@ export default function CreateProjectPage() {
                 <p className="text-center text-2xl font-bold text-orange">
                   Rs. {Number(form.budget_needed).toLocaleString("en-IN")}
                 </p>
-                <p className="text-center text-md font-bold text-text-grey">
+                <p className="mt-1 text-center text-xs font-semibold text-text-grey">
                   Drag to adjust, max Rs. 50,000
                 </p>
               </div>
@@ -219,14 +219,16 @@ export default function CreateProjectPage() {
                 </Slider.Root>
               </div>
 
-              <div className="mt-2 text-md">
-                <p className="font-bold text-text-grey">Budget breakdown</p>
+              <div className="mt-4">
+                <p className="block text-lg font-bold text-white1">
+                  Budget breakdown
+                </p>
                 <textarea
                   value={form.budget_breakdown}
                   onChange={(event) =>
                     updateField("budget_breakdown", event.target.value)
                   }
-                  className="mt-4 h-30 w-full resize-none rounded-lg bg-box-light p-3 text-s transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
+                  className="mt-3 h-30 w-full resize-none rounded-lg bg-box-light p-3 text-sm transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
                 />
               </div>
             </div>
@@ -287,7 +289,7 @@ export default function CreateProjectPage() {
             <button
               type="button"
               onClick={() => navigate("/explore")}
-              className="group relative overflow-hidden rounded-lg border border-orange px-6 py-3 font-semibold transition:transform duration-200 cursor-pointer active:scale-95"
+              className="group relative overflow-hidden rounded-lg border border-orange px-6 py-3 font-semibold transition-transform duration-200 cursor-pointer active:scale-95"
             >
               <span className="absolute inset-0 origin-left scale-x-0 bg-orange transition-all duration-200 group-hover:scale-x-100" />
               <span className="relative z-10 transition-colors">
@@ -298,7 +300,7 @@ export default function CreateProjectPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="group relative overflow-hidden rounded-lg px-6 py-3 font-semibold transition:transform duration-200 cursor-pointer active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+              className="group relative overflow-hidden rounded-lg px-6 py-3 font-semibold transition-transform duration-200 cursor-pointer active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
             >
               <span className="absolute inset-0 bg-orange" />
               <span className="absolute inset-0 origin-left scale-x-0 bg-gradient-to-r from-orange-light to-orange transition-all duration-400 group-hover:scale-x-100" />

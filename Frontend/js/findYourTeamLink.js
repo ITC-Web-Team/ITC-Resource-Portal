@@ -1,1 +1,1 @@
-export const FIND_YOUR_TEAM_URL = "http://localhost:3001/";
+export const FIND_YOUR_TEAM_URL = "https://itsp-team-making.tech-iitb.org/";
