@@ -224,6 +224,7 @@ export default function AdminProjectDetailsPage() {
                   <input
                     type="number"
                     min="0"
+                    max="20000"
                     value={approvedBudget}
                     onChange={(e) => setApprovedBudget(e.target.value)}
                     className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition-colors focus:border-[#FD6E59]/60 focus:outline-none"

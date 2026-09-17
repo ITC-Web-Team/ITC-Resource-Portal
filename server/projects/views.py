@@ -214,6 +214,12 @@ def approve_request(request, pk):
                 status=400,
             )
 
+    if approved_budget < 0 or approved_budget > 20000:
+        return JsonResponse(
+            {"detail": "approved_budget must be between 0 and 20,000."},
+            status=400,
+        )
+
     if not approved_timeline:
         approved_timeline = project.tentative_timeline
 
