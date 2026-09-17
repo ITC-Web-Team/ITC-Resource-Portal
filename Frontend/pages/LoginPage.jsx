@@ -21,7 +21,7 @@ export default function LoginPage() {
       </svg>
 
       <div className="relative w-full max-w-sm">
-        <div className="rounded-2xl border border-[#FD6E59]/60 bg-[#111116]/90 p-8 shadow-[0_0_40px_-10px_rgba(253,110,89,0.35)] backdrop-blur">
+        <div className="rounded-2xl border border-[#FD6E59]/60 bg-[#111116]/90 p-8 shadow-[0_0_40px_-10px_rgba(253,110,89,0.35)] backdrop-blur transition-shadow duration-300 hover:shadow-[0_0_55px_-8px_rgba(253,110,89,0.45)]">
           <h1 className="text-center text-2xl font-extrabold text-white">
             ITC <span className="text-[#FD6E59]">Resources</span> Portal
           </h1>
@@ -34,7 +34,7 @@ export default function LoginPage() {
             onClick={() => {
   window.location.href = `${SERVER_ORIGIN}/accounts/login/`;
 }}
-            className="mt-6 w-full rounded-full bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] py-3 text-xs font-bold tracking-wide text-white transition-transform hover:scale-[1.01]"
+            className="mt-6 w-full rounded-full bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] py-3 text-xs font-bold tracking-wide text-white shadow-md shadow-black/20 transition-all hover:scale-[1.01] hover:shadow-lg hover:shadow-[#FD6E59]/30"
           >
             LOGIN WITH SSO
           </button>

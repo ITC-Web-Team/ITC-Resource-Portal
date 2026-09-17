@@ -60,11 +60,12 @@ class ProjectReview(models.Model):
     )
     approved_timeline = models.CharField(max_length=120, blank=True)
     live_deadline = models.DateField(blank=True, null=True)
-    # NOTE: admin_name/email/phone are stored separately as a "snapshot"
-    # in case the reviewing admin's profile changes later. If you'd rather
-    # always pull live data from reviewed_by.name / reviewed_by.email,
-    # you can remove these three fields.
+    # NOTE: admin_name/roll_no/email/phone are stored separately as a
+    # "snapshot" in case the reviewing admin's profile changes later. If
+    # you'd rather always pull live data from reviewed_by.name /
+    # reviewed_by.roll_no / reviewed_by.email, you can remove these fields.
     admin_name = models.CharField(max_length=150)
+    admin_roll_no = models.CharField(max_length=30, blank=True)
     admin_email = models.EmailField(blank=True)
     admin_phone = models.CharField(max_length=20, blank=True)
     remarks = models.TextField(blank=True)

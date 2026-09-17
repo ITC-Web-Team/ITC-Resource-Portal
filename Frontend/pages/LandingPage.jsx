@@ -135,14 +135,14 @@ export default function LandingPage() {
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 to="/create-project"
-                className="flex items-center gap-2 rounded-lg border-2 border-[#FD6E59] bg-white px-6 py-3.5 text-xs font-extrabold tracking-wide text-black transition-transform hover:scale-[1.02]"
+                className="flex items-center gap-2 rounded-lg border-2 border-[#FD6E59] bg-white px-6 py-3.5 text-xs font-extrabold tracking-wide text-black shadow-md shadow-black/10 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-[#FD6E59]/20"
               >
                 <Plus size={14} strokeWidth={3} />
                 CREATE PROJECT
               </Link>
               <Link
                 to="/explore"
-                className="flex items-center gap-2 rounded-lg border-2 border-[#FD6E59] bg-white px-6 py-3.5 text-xs font-extrabold tracking-wide text-black transition-transform hover:scale-[1.02]"
+                className="flex items-center gap-2 rounded-lg border-2 border-[#FD6E59] bg-white px-6 py-3.5 text-xs font-extrabold tracking-wide text-black shadow-md shadow-black/10 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-[#FD6E59]/20"
               >
                 EXPLORE PROJECTS
                 <ArrowRight size={14} strokeWidth={3} />
@@ -162,7 +162,7 @@ export default function LandingPage() {
             {steps.map((step) => (
               <div
                 key={step.n}
-                className="rounded-xl bg-[#585A72]/50 p-6 transition-colors hover:bg-[#585A72]/70"
+                className="rounded-xl bg-[#585A72]/50 p-6 shadow-md shadow-black/10 transition-all duration-200 hover:-translate-y-1 hover:bg-[#585A72]/70 hover:shadow-lg hover:shadow-black/25"
               >
                 <h3 className="text-lg font-extrabold leading-snug text-white">
                   {step.n} {step.title}
@@ -185,7 +185,7 @@ export default function LandingPage() {
             <span className="text-gray-400">funded.</span>
           </h3>
 
-          <div className="relative mx-auto flex w-full max-w-[1167px] flex-col items-start justify-between gap-8 rounded-[25px] bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] px-8 py-10 sm:flex-row sm:items-center sm:px-16">
+          <div className="relative mx-auto flex w-full max-w-[1167px] flex-col items-start justify-between gap-8 rounded-[25px] bg-gradient-to-r from-[#FC9D44] to-[#FD6E59] px-8 py-10 shadow-xl shadow-[#FD6E59]/10 sm:flex-row sm:items-center sm:px-16">
             <p className="max-w-md text-2xl font-semibold leading-snug text-black sm:text-[32px]">
               Great projects start with the right team.
             </p>

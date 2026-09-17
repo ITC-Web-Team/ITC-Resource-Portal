@@ -139,7 +139,7 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        <section className="mt-6 rounded-xl border border-white/10 bg-[#585A72]/20 p-6">
+        <section className="mt-6 rounded-xl border border-white/10 bg-[#585A72]/20 p-6 shadow-lg shadow-black/20">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-bold text-white">{activeTab.label}</h2>
             <button className="flex items-center gap-1 text-xs font-bold text-[#FD6E59] hover:text-[#fc846f]">
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
 function RowWithDetails({ request, expanded, onToggle, onInfo, onApprove, onReject }) {
   return (
     <>
-      <tr className="border-t border-white/5 text-gray-300">
+      <tr className="border-t border-white/5 text-gray-300 transition-colors hover:bg-white/[0.03]">
         <td className="py-3">{request.user}</td>
         <td className="py-3">{request.project}</td>
         <td className="py-3">{request.status}</td>

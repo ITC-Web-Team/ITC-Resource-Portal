@@ -1,3 +1,6 @@
+from datetime import datetime
+from decimal import Decimal, InvalidOperation
+
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
@@ -145,6 +148,7 @@ def request_details(request, pk):
         )
 
     project = get_object_or_404(Project, pk=pk)
+    review = getattr(project, "review", None)
 
     return JsonResponse({
         "id": project.id,
@@ -161,6 +165,25 @@ def request_details(request, pk):
         "team_lead_name": project.team_lead_name,
         "status": project.status,
         "created_at": project.created_at.strftime("%d/%m/%Y"),
+        "review": (
+            {
+                "approved_budget": (
+                    str(review.approved_budget)
+                    if review.approved_budget is not None
+                    else None
+                ),
+                "approved_timeline": review.approved_timeline,
+                "live_deadline": (
+                    review.live_deadline.isoformat()
+                    if review.live_deadline
+                    else None
+                ),
+                "admin_name": review.admin_name,
+                "admin_roll_no": review.admin_roll_no,
+            }
+            if review
+            else None
+        ),
     })
 
 @api_view(["PATCH"])
@@ -174,6 +197,51 @@ def approve_request(request, pk):
         )
 
     project = get_object_or_404(Project, pk=pk)
+    admin_profile = request.user.profile
+
+    approved_budget = request.data.get("approved_budget")
+    approved_timeline = request.data.get("approved_timeline")
+    live_deadline = request.data.get("live_deadline")
+
+    if approved_budget in (None, ""):
+        approved_budget = project.budget_needed
+    else:
+        try:
+            approved_budget = Decimal(str(approved_budget))
+        except InvalidOperation:
+            return JsonResponse(
+                {"detail": "approved_budget must be a number."},
+                status=400,
+            )
+
+    if not approved_timeline:
+        approved_timeline = project.tentative_timeline
+
+    if live_deadline in (None, ""):
+        live_deadline = None
+    else:
+        try:
+            live_deadline = datetime.strptime(
+                live_deadline, "%Y-%m-%d"
+            ).date()
+        except ValueError:
+            return JsonResponse(
+                {"detail": "live_deadline must be in YYYY-MM-DD format."},
+                status=400,
+            )
+
+    review, _ = ProjectReview.objects.update_or_create(
+        project=project,
+        defaults={
+            "reviewed_by": admin_profile,
+            "admin_name": admin_profile.name,
+            "admin_roll_no": admin_profile.roll_no,
+            "admin_email": admin_profile.email,
+            "approved_budget": approved_budget,
+            "approved_timeline": approved_timeline,
+            "live_deadline": live_deadline,
+        },
+    )
 
     project.status = Project.Status.APPROVED
     project.save()
@@ -182,6 +250,13 @@ def approve_request(request, pk):
         "message": "Request approved",
         "id": project.id,
         "status": project.status,
+        "approved_budget": str(review.approved_budget),
+        "approved_timeline": review.approved_timeline,
+        "live_deadline": (
+            review.live_deadline.isoformat()
+            if review.live_deadline
+            else None
+        ),
     })
 
 @api_view(["PATCH"])

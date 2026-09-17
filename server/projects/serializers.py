@@ -84,6 +84,7 @@ class ProjectReviewSerializer(serializers.ModelSerializer):
             "approved_timeline",
             "live_deadline",
             "admin_name",
+            "admin_roll_no",
             "admin_email",
             "admin_phone",
             "remarks",

@@ -32,7 +32,8 @@ const MOCK_USER = {
 const MOCK_MENTOR = {
   name: "Dr. Anita Sharma",
   initials: "AS",
-  role: "Assistant Professor, CSE",
+  role: "Admin / Mentor",
+  rollNo: "22B1000",
   email: "anita.sharma@iitb.ac.in",
   phone: "+91 91234 56789",
 };
@@ -42,6 +43,7 @@ const MOCK_PROJECTS = [
     id: 1,
     title: "AI-powered Crop Disease Detector",
     category: "AI / ML",
+    teamLead: "Raj Kumar",
     deadline: "Oct 15, 2026",
     status: "APPROVED",
     allotted: "₹18,000",
@@ -242,7 +244,7 @@ export default function MyProfilePage() {
         {/* ================= USER INFO ================= */}
         <section className="px-6 pb-10 md:px-16">
 
-          <div className="rounded-2xl border border-white/10 bg-[#111116]/80 p-8">
+          <div className="rounded-2xl border border-white/10 bg-[#111116]/80 p-8 shadow-lg shadow-black/20 transition-shadow hover:shadow-xl hover:shadow-black/30">
 
             {loading ? (
               <p className="text-sm text-gray-500">
@@ -293,7 +295,7 @@ export default function MyProfilePage() {
         {/* ================= MENTOR ================= */}
         <section className="px-6 pb-10 md:px-16">
 
-          <div className="rounded-2xl border border-white/10 bg-[#111116]/80 p-8">
+          <div className="rounded-2xl border border-white/10 bg-[#111116]/80 p-8 shadow-lg shadow-black/20 transition-shadow hover:shadow-xl hover:shadow-black/30">
 
             <h3 className="mb-6 text-lg font-extrabold tracking-wide text-white">
               MENTOR AND THEIR INFO
@@ -313,26 +315,31 @@ export default function MyProfilePage() {
                 <div className="min-w-[200px] flex-1">
 
                   <h4 className="text-base font-bold text-white">
-                    {mentor.name}
+                    {mentor.name || "Not assigned yet"}
                   </h4>
 
                   <p className="mt-1 text-sm text-gray-400">
                     {mentor.role}
+                    {mentor.rollNo && ` · ${mentor.rollNo}`}
                   </p>
 
-                  <div className="mt-3 flex flex-wrap items-center gap-3">
+                  {mentor.name && (
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
 
-                    <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300">
-                      <Mail size={12} />
-                      {mentor.email}
-                    </span>
+                      <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300">
+                        <Mail size={12} />
+                        {mentor.email}
+                      </span>
 
-                    <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300">
-                      <Phone size={12} />
-                      {mentor.phone}
-                    </span>
+                      {mentor.phone && (
+                        <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300">
+                          <Phone size={12} />
+                          {mentor.phone}
+                        </span>
+                      )}
 
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -361,7 +368,7 @@ export default function MyProfilePage() {
               {projects.map((project) => (
                 <div
                   key={project.id}
-                  className="rounded-2xl border border-[#FD6E59]/40 bg-[#111116]/80 p-8"
+                  className="rounded-2xl border border-[#FD6E59]/40 bg-[#111116]/80 p-8 shadow-lg shadow-black/20 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/30"
                 >
 
                   <div className="flex flex-wrap items-start justify-between gap-4">
@@ -372,8 +379,14 @@ export default function MyProfilePage() {
                       </h4>
 
                       <p className="mt-1 text-sm text-gray-400">
-                        {project.category} · Deadline{" "}
-                        {project.deadline}
+                        {project.category}
+                        {project.teamLead && (
+                          <> · Team Lead: {project.teamLead}</>
+                        )}
+                        {project.status === "APPROVED" &&
+                          project.deadline && (
+                            <> · Deadline: {project.deadline}</>
+                          )}
                       </p>
                     </div>
 

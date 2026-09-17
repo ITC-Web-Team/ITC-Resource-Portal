@@ -10,8 +10,11 @@ export function fetchRequestDetails(id) {
   return request(`/requests/${id}`);
 }
 
-export function approveRequest(id) {
-  return request(`/requests/${id}/approve`, { method: "PATCH" });
+export function approveRequest(id, payload = {}) {
+  return request(`/requests/${id}/approve`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
 }
 
 export function rejectRequest(id) {

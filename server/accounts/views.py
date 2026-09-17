@@ -14,7 +14,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from projects.models import Project
+from projects.models import Project, ProjectReview
 
 User = get_user_model()
 
@@ -178,32 +178,37 @@ def logout_view(request):
 def my_mentor(request):
     profile = request.user.profile
 
-    project = (
-        Project.objects
-        .filter(created_by=profile)
-        .exclude(team_lead_name="")
+    # The "mentor" is the admin who reviewed/approved one of this user's
+    # projects, not the student-entered team lead (see Project.team_lead_name,
+    # which is shown separately on each project card).
+    review = (
+        ProjectReview.objects
+        .filter(project__created_by=profile)
+        .order_by("-reviewed_at")
         .first()
     )
 
-    if not project:
+    if not review:
         return Response({
             "name": "",
             "initials": "",
             "role": "",
+            "rollNo": "",
             "email": "",
             "phone": "",
         })
 
-    mentor_name = project.team_lead_name.strip()
+    mentor_name = review.admin_name.strip()
 
     return Response({
         "name": mentor_name,
         "initials": "".join(
             word[0] for word in mentor_name.split()[:2]
-        ).upper(),
-        "role": "Team Lead / Mentor",
-        "email": project.contact_email,
-        "phone": project.contact_phone,
+        ).upper() if mentor_name else "",
+        "role": "Admin / Mentor",
+        "rollNo": review.admin_roll_no,
+        "email": review.admin_email,
+        "phone": review.admin_phone,
     })
 
 @api_view(["GET"])
@@ -224,6 +229,7 @@ def my_projects(request):
             "id": project.id,
             "title": project.title,
             "category": project.domain,
+            "teamLead": project.team_lead_name,
             "deadline": (
                 review.live_deadline.strftime("%b %d, %Y")
                 if review and review.live_deadline

@@ -37,7 +37,7 @@ export default function CreateProjectPage() {
   const [success, setSuccess] = useState(null);
 
   const contactClass =
-    "relative flex items-center max-w-xl bg-box-light rounded-lg h-12 pl-3";
+    "relative flex items-center max-w-xl bg-box-light rounded-lg h-12 pl-3 transition-shadow focus-within:ring-2 focus-within:ring-orange/50";
   const contactInputClass =
     "absolute inset-0 flex-1 bg-transparent text-white2 text-sm h-full rounded-lg w-full pl-40 pr-3";
 
@@ -98,7 +98,7 @@ export default function CreateProjectPage() {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="mx-auto mt-10 flex max-w-3xl flex-col gap-7 rounded-4xl bg-box-dark p-10 text-inter text-white1">
+          <div className="mx-auto mt-10 flex max-w-3xl flex-col gap-7 rounded-4xl bg-box-dark p-10 text-inter text-white1 shadow-2xl shadow-black/30">
             {error && (
               <p className="rounded-lg border border-red-400/20 bg-red-500/10 px-4 py-3 text-sm text-red-300">
                 {error}
@@ -119,7 +119,7 @@ export default function CreateProjectPage() {
                 type="text"
                 value={form.title}
                 onChange={(event) => updateField("title", event.target.value)}
-                className="h-10 w-full rounded-lg bg-box-light p-3 text-s"
+                className="h-10 w-full rounded-lg bg-box-light p-3 text-s transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
                 required
               />
             </div>
@@ -134,7 +134,7 @@ export default function CreateProjectPage() {
                 onChange={(event) =>
                   updateField("problem_statement", event.target.value)
                 }
-                className="h-18 w-full resize-none rounded-lg bg-box-light p-3"
+                className="h-18 w-full resize-none rounded-lg bg-box-light p-3 transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
                 required
               />
             </div>
@@ -148,7 +148,7 @@ export default function CreateProjectPage() {
                 value={form.domain}
                 onChange={(event) => updateField("domain", event.target.value)}
                 placeholder="AI / ML, Robotics, Software, Electronics, Sustainability etc."
-                className="h-18 w-full resize-none rounded-lg bg-box-light p-3"
+                className="h-18 w-full resize-none rounded-lg bg-box-light p-3 transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
                 required
               />
             </div>
@@ -226,7 +226,7 @@ export default function CreateProjectPage() {
                   onChange={(event) =>
                     updateField("budget_breakdown", event.target.value)
                   }
-                  className="mt-4 h-30 w-full resize-none rounded-lg bg-box-light p-3 text-s"
+                  className="mt-4 h-30 w-full resize-none rounded-lg bg-box-light p-3 text-s transition-shadow focus:outline-none focus:ring-2 focus:ring-orange/50"
                 />
               </div>
             </div>
