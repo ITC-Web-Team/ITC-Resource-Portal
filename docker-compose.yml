@@ -36,12 +36,12 @@ services:
   frontend:
     build:
       context: ./Frontend
-      args:
-        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://127.0.0.1:8000/api}
-        VITE_API_ORIGIN: ${VITE_API_ORIGIN:-http://127.0.0.1:8000}
     restart: unless-stopped
     depends_on:
       - backend
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://127.0.0.1:8000/api}
+      VITE_API_ORIGIN: ${VITE_API_ORIGIN:-http://127.0.0.1:8000}
     ports:
       - "5173:80"
 
