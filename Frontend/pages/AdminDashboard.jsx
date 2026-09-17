@@ -84,10 +84,14 @@ export default function AdminDashboard() {
 
       <div className="relative flex min-h-screen flex-col">
   
-        <header className="flex items-center justify-between py-6">
-          <BrandLockup />
+        <header className="grid grid-cols-[1fr_auto_1fr] items-center py-6">
+          <span />
 
-          <div className="flex items-center gap-2">
+          <div className="justify-self-center">
+            <BrandLockup />
+          </div>
+
+          <div className="flex items-center justify-end gap-2">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-500 text-xs font-bold text-white">
               M
             </span>

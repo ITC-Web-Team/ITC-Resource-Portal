@@ -61,10 +61,8 @@ export default function LandingPage() {
       <div className="pointer-events-none fixed -top-40 -left-40 h-96 w-96 rounded-full bg-[#FD6E59]/20 blur-3xl" />
 
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-1 flex-col">
-        <header className="grid grid-cols-[auto_1fr_auto] items-center gap-6 px-6 py-6 md:px-16">
-          <BrandLockup />
-
-          <nav className="hidden items-center justify-center gap-14 text-sm font-medium text-gray-300 md:flex">
+        <header className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 px-6 py-6 md:px-16">
+          <nav className="col-start-1 hidden items-center gap-14 text-sm font-medium text-gray-300 md:flex">
             {navLinks.map((link) => (
               link.href ? (
                 <a
@@ -87,6 +85,10 @@ export default function LandingPage() {
               )
             ))}
           </nav>
+
+          <div className="col-start-2 justify-self-center">
+            <BrandLockup />
+          </div>
 
                    <button
   onClick={async () => {

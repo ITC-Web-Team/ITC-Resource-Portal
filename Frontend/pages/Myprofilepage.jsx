@@ -160,13 +160,10 @@ export default function MyProfilePage() {
       <div className="relative mx-auto flex w-full max-w-[1440px] flex-col">
 
         {/* ================= NAVBAR ================= */}
-        <header className="grid grid-cols-[auto_1fr_auto] items-center gap-6 px-6 py-6 md:px-16">
-
-          {/* Logo */}
-          <BrandLockup />
+        <header className="grid grid-cols-[1fr_auto_1fr] items-center gap-6 px-6 py-6 md:px-16">
 
           {/* Navigation */}
-          <nav className="hidden items-center justify-center gap-14 text-sm font-medium text-gray-300 md:flex">
+          <nav className="col-start-1 hidden items-center gap-14 text-sm font-medium text-gray-300 md:flex">
             {navLinks.map((link) =>
               link.href ? (
                 <a
@@ -190,8 +187,13 @@ export default function MyProfilePage() {
             )}
           </nav>
 
+          {/* Logo */}
+          <div className="col-start-2 justify-self-center">
+            <BrandLockup />
+          </div>
+
           {/* Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="col-start-3 flex items-center justify-end gap-3">
 
             <Link
               to="/profile"
