@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { BASE_URL } from "./js/apiClient";
@@ -15,14 +15,18 @@ import AdminProjectDetailsPage from "./pages/AdminProjectDetailsPage";
 
 
 /* =========================
-   PROTECTED USER ROUTE
+   REQUIRE LOGIN FOR THE WHOLE APP
+   (everything except /login lives under this layout route, so the
+   login check runs once per app load rather than once per navigation)
    ========================= */
 
-function UserRoute({ children }) {
+function RequireAuth() {
   const [checking, setChecking] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
+    let cancelled = false;
+
     const checkLogin = async () => {
       try {
         const response = await fetch(
@@ -33,20 +37,26 @@ function UserRoute({ children }) {
           }
         );
 
-        if (response.ok) {
-          setLoggedIn(true);
-        } else {
-          setLoggedIn(false);
+        if (!cancelled) {
+          setLoggedIn(response.ok);
         }
       } catch (error) {
         console.error("Login check failed:", error);
-        setLoggedIn(false);
+        if (!cancelled) {
+          setLoggedIn(false);
+        }
       } finally {
-        setChecking(false);
+        if (!cancelled) {
+          setChecking(false);
+        }
       }
     };
 
     checkLogin();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (checking) {
@@ -61,7 +71,7 @@ function UserRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return <Outlet />;
 }
 
 
@@ -74,60 +84,46 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* Landing */}
-        <Route path="/" element={<LandingPage />} />
-
-        {/* Login */}
+        {/* Login - the only route reachable while logged out */}
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Admin */}
-        <Route path="/not-admin" element={<AdminPage />} />
+        <Route element={<RequireAuth />}>
 
-        <Route
-          path="/admin-dashboard"
-          element={
-            <AdminRoute>
-              <AdminDashboard />
-            </AdminRoute>
-          }
-        />
+          {/* Landing */}
+          <Route path="/" element={<LandingPage />} />
 
-        <Route
-          path="/admin/project/:id"
-          element={
-            <AdminRoute>
-              <AdminProjectDetailsPage />
-            </AdminRoute>
-          }
-        />
+          {/* Admin */}
+          <Route path="/not-admin" element={<AdminPage />} />
 
-        {/* =========================
-            USER PROFILE - PROTECTED
-           ========================= */}
-        <Route
-          path="/profile"
-          element={
-            <UserRoute>
-              <MyProfilePage />
-            </UserRoute>
-          }
-        />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
 
-        {/* Other pages */}
-        <Route
-          path="/explore"
-          element={<ExploreProjectsPage />}
-        />
+          <Route
+            path="/admin/project/:id"
+            element={
+              <AdminRoute>
+                <AdminProjectDetailsPage />
+              </AdminRoute>
+            }
+          />
 
-        <Route
-          path="/project/:projectId"
-          element={<ProjectDetailsPage />}
-        />
+          {/* User profile */}
+          <Route path="/profile" element={<MyProfilePage />} />
 
-        <Route
-          path="/create-project"
-          element={<CreateProjectPage />}
-        />
+          {/* Other pages */}
+          <Route path="/explore" element={<ExploreProjectsPage />} />
+
+          <Route path="/project/:projectId" element={<ProjectDetailsPage />} />
+
+          <Route path="/create-project" element={<CreateProjectPage />} />
+
+        </Route>
 
       </Routes>
     </BrowserRouter>
