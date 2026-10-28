@@ -31,7 +31,7 @@ export default function AdminProjectDetailsPage() {
         setApprovedTimeline(
           data.review?.approved_timeline || data.tentative_timeline || ""
         );
-        setLiveDeadline(data.review?.live_deadline || "");
+        setLiveDeadline(data.review?.live_deadline || data.end_date || "");
       } catch (err) {
         setError(err.message || "Failed to load project details");
       } finally {
@@ -126,69 +126,93 @@ export default function AdminProjectDetailsPage() {
             <p className="mt-2 text-sm text-gray-400">
               Submitted by{" "}
               <span className="font-semibold text-gray-300">
-                {project.team_lead_name || "Unknown"}
+                {project.submitted_by_name}
               </span>
+              {project.submitted_by_roll_no && (
+                <span className="text-gray-500">
+                  {" "}· {project.submitted_by_roll_no}
+                </span>
+              )}
+              <span className="text-gray-500"> · {project.created_at}</span>
             </p>
 
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-[#FD6E59]">
-                Problem Statement
-              </h3>
+            <ReviewSection
+              title="1. Proposal"
+              criterion="Clear objective, scope and expected outcome"
+            >
+              <Field label="Objective" value={project.objective} />
+              <Field label="Scope" value={project.scope} />
+              <Field label="Expected Outcome" value={project.expected_outcome} />
+              <Field label="Domain" value={project.domain} />
+            </ReviewSection>
 
-              <p className="mt-3 text-gray-300">
-                {project.problem_statement}
-              </p>
-            </div>
+            <ReviewSection
+              title="2. Motivation"
+              criterion="A clear reason for the project and why it's worth doing"
+            >
+              <Field label="Problem Statement" value={project.problem_statement} />
+              <Field label="Why it's worth doing" value={project.motivation} />
+            </ReviewSection>
 
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-[#FD6E59]">
-                Domain
-              </h3>
+            <ReviewSection
+              title="3. Timeline"
+              criterion="End date is broadly feasible for the scope"
+            >
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field
+                  label="End Date"
+                  value={formatDate(project.end_date)}
+                />
+                <Field label="Duration" value={project.tentative_timeline} />
+                <Field label="Team Size" value={project.team_size} />
+              </div>
+            </ReviewSection>
 
-              <p className="mt-3 text-gray-300">
-                {project.domain || "Not provided"}
-              </p>
-            </div>
+            <ReviewSection
+              title="4. Budget"
+              criterion="Reasonable, justified, with major expenses accounted for"
+            >
+              <Field
+                label="Requested"
+                value={
+                  project.budget_needed &&
+                  `₹${Number(project.budget_needed).toLocaleString("en-IN")}`
+                }
+              />
+              <Field label="Breakdown" value={project.budget_breakdown} />
+            </ReviewSection>
 
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-[#FD6E59]">
-                Timeline
-              </h3>
-
-              <p className="mt-3 text-gray-300">
-                {project.tentative_timeline || "Not provided"}
-              </p>
-            </div>
-
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-[#FD6E59]">
-                Team Size
-              </h3>
-
-              <p className="mt-3 text-gray-300">
-                {project.team_size || "Not provided"}
-              </p>
-            </div>
-
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-[#FD6E59]">
-                Budget
-              </h3>
-
-              <p className="mt-3 text-gray-300">
-                ₹{project.budget_needed}
-              </p>
-            </div>
-
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-[#FD6E59]">
-                Budget Breakdown
-              </h3>
-
-              <p className="mt-3 text-gray-300">
-                {project.budget_breakdown || "Not provided"}
-              </p>
-            </div>
+            <ReviewSection title="Contact">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <Field label="Team Lead" value={project.team_lead_name} />
+                <Field
+                  label="Email"
+                  value={
+                    project.contact_email && (
+                      <a
+                        href={`mailto:${project.contact_email}`}
+                        className="text-[#FD6E59] hover:underline"
+                      >
+                        {project.contact_email}
+                      </a>
+                    )
+                  }
+                />
+                <Field
+                  label="Phone"
+                  value={
+                    project.contact_phone && (
+                      <a
+                        href={`tel:${project.contact_phone}`}
+                        className="text-[#FD6E59] hover:underline"
+                      >
+                        {project.contact_phone}
+                      </a>
+                    )
+                  }
+                />
+              </div>
+            </ReviewSection>
 
             {project.review?.admin_name && (
               <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-5">
@@ -280,4 +304,47 @@ export default function AdminProjectDetailsPage() {
       </div>
     </div>
   );
+}
+
+function ReviewSection({ title, criterion, children }) {
+  return (
+    <section className="mt-8 rounded-2xl border border-white/10 bg-white/[0.02] p-6">
+      <h3 className="text-lg font-bold text-[#FD6E59]">{title}</h3>
+      {criterion && (
+        <p className="mt-1 text-xs text-gray-500">Check: {criterion}</p>
+      )}
+      <div className="mt-5 flex flex-col gap-5">{children}</div>
+    </section>
+  );
+}
+
+function Field({ label, value }) {
+  const empty = value === null || value === undefined || value === "";
+
+  return (
+    <div>
+      <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+        {label}
+      </p>
+      <div className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-gray-200">
+        {empty ? (
+          <span className="italic text-gray-600">Not provided</span>
+        ) : (
+          value
+        )}
+      </div>
+    </div>
+  );
+}
+
+function formatDate(iso) {
+  if (!iso) {
+    return null;
+  }
+
+  return new Date(`${iso}T00:00:00`).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }

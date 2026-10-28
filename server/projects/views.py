@@ -154,9 +154,18 @@ def request_details(request, pk):
         "id": project.id,
         "title": project.title,
         "problem_statement": project.problem_statement,
+        "objective": project.objective,
+        "scope": project.scope,
+        "expected_outcome": project.expected_outcome,
+        "motivation": project.motivation,
         "domain": project.domain,
         "tentative_timeline": project.tentative_timeline,
+        "end_date": (
+            project.end_date.isoformat() if project.end_date else None
+        ),
         "team_size": project.team_size,
+        "submitted_by_name": project.created_by.name,
+        "submitted_by_roll_no": project.created_by.roll_no,
         "budget_needed": str(project.budget_needed),
         "budget_breakdown": project.budget_breakdown,
         "contact_info": project.contact_info,

@@ -29,6 +29,19 @@ function getCookie(name) {
   return null;
 }
 
+// DRF validation errors come back as { field_name: ["message", ...], ... }.
+function formatFieldErrors(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return null;
+  }
+
+  const messages = Object.entries(body)
+    .filter(([, value]) => Array.isArray(value) && value.length)
+    .map(([field, value]) => `${field.replaceAll("_", " ")}: ${value[0]}`);
+
+  return messages.length ? messages.join(" · ") : null;
+}
+
 export async function request(path, options = {}) {
   const method = (options.method || "GET").toUpperCase();
   const headers = {
@@ -50,7 +63,10 @@ export async function request(path, options = {}) {
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error(
-      body.detail || body.message || `Request failed: ${res.status}`
+      body.detail ||
+        body.message ||
+        formatFieldErrors(body) ||
+        `Request failed: ${res.status}`
     );
   }
 

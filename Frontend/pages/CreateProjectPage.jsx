@@ -6,9 +6,14 @@ import { createProject } from "../js/projectApi";
 
 const initialForm = {
   title: "",
+  objective: "",
+  scope: "",
+  expected_outcome: "",
   problem_statement: "",
+  motivation: "",
   domain: "",
   tentative_timeline: "3 months",
+  end_date: "",
   team_size: "3",
   budget_needed: 15000,
   budget_breakdown: "",
@@ -38,6 +43,47 @@ function SectionDivider() {
   return <div className="h-px w-full bg-white/5" />;
 }
 
+function SectionHeading({ title, hint }) {
+  return (
+    <div>
+      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-light">
+        {title}
+      </h2>
+      {hint && <p className="mt-1.5 text-xs text-text-grey">{hint}</p>}
+    </div>
+  );
+}
+
+function RequiredLabel({ children }) {
+  return (
+    <label className={fieldLabelClass}>
+      {children} <span className="text-orange">*</span>
+    </label>
+  );
+}
+
+function TextAreaField({ label, value, onChange, placeholder, rows = 3 }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <RequiredLabel>{label}</RequiredLabel>
+      <textarea
+        rows={rows}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        className={`${inputClass} resize-none`}
+        required
+      />
+    </div>
+  );
+}
+
+function tomorrowISO() {
+  const d = new Date();
+  d.setDate(d.getDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+
 export default function CreateProjectPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState(initialForm);
@@ -54,16 +100,27 @@ export default function CreateProjectPage() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setSubmitting(true);
     setError(null);
     setSuccess(null);
+
+    if (Number(form.budget_needed) <= 0) {
+      setError("Please set a budget greater than ₹0.");
+      return;
+    }
+
+    setSubmitting(true);
 
     try {
       await createProject({
         title: form.title.trim(),
+        objective: form.objective.trim(),
+        scope: form.scope.trim(),
+        expected_outcome: form.expected_outcome.trim(),
         problem_statement: form.problem_statement.trim(),
+        motivation: form.motivation.trim(),
         domain: form.domain.trim(),
         tentative_timeline: form.tentative_timeline,
+        end_date: form.end_date,
         team_size: Number(form.team_size),
         budget_needed: Number(form.budget_needed),
         budget_breakdown: form.budget_breakdown.trim(),
@@ -117,16 +174,19 @@ export default function CreateProjectPage() {
               </p>
             )}
 
-            {/* ================= PROJECT DETAILS ================= */}
+            <p className="text-xs text-text-grey">
+              All fields are required.
+            </p>
+
+            {/* ================= PROPOSAL ================= */}
             <div className="flex flex-col gap-6">
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-light">
-                Project Details
-              </h2>
+              <SectionHeading
+                title="Proposal"
+                hint="A clear objective, scope and expected outcome."
+              />
 
               <div className="flex flex-col gap-2">
-                <label className={fieldLabelClass}>
-                  Project Title <span className="text-orange">*</span>
-                </label>
+                <RequiredLabel>Project Title</RequiredLabel>
                 <input
                   type="text"
                   value={form.title}
@@ -137,45 +197,79 @@ export default function CreateProjectPage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabelClass}>
-                  Problem Statement <span className="text-orange">*</span>
-                </label>
-                <textarea
-                  rows={3}
-                  value={form.problem_statement}
-                  onChange={(event) =>
-                    updateField("problem_statement", event.target.value)
-                  }
-                  placeholder="What problem are you solving, and for whom?"
-                  className={`${inputClass} resize-none`}
-                  required
-                />
-              </div>
+              <TextAreaField
+                label="Objective"
+                value={form.objective}
+                onChange={(value) => updateField("objective", value)}
+                placeholder="What exactly do you want to achieve?"
+              />
 
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabelClass}>
-                  Domain / Field <span className="text-orange">*</span>
-                </label>
-                <textarea
-                  rows={2}
-                  value={form.domain}
-                  onChange={(event) => updateField("domain", event.target.value)}
-                  placeholder="AI / ML, Robotics, Software, Electronics, Sustainability etc."
-                  className={`${inputClass} resize-none`}
-                  required
-                />
-              </div>
+              <TextAreaField
+                label="Scope"
+                value={form.scope}
+                onChange={(value) => updateField("scope", value)}
+                placeholder="What is included in this project, and what is explicitly out of scope?"
+              />
 
-              <div className="grid grid-cols-2 gap-6 sm:max-w-sm">
+              <TextAreaField
+                label="Expected Outcome"
+                value={form.expected_outcome}
+                onChange={(value) => updateField("expected_outcome", value)}
+                placeholder="What will exist at the end - a working prototype, a deployed app, a report?"
+              />
+
+              <TextAreaField
+                label="Domain / Field"
+                rows={2}
+                value={form.domain}
+                onChange={(value) => updateField("domain", value)}
+                placeholder="AI / ML, Robotics, Software, Electronics, Sustainability etc."
+              />
+            </div>
+
+            <SectionDivider />
+
+            {/* ================= MOTIVATION ================= */}
+            <div className="flex flex-col gap-6">
+              <SectionHeading
+                title="Motivation"
+                hint="A clear reason for the project and why it's worth doing."
+              />
+
+              <TextAreaField
+                label="Problem Statement"
+                value={form.problem_statement}
+                onChange={(value) => updateField("problem_statement", value)}
+                placeholder="What problem are you solving, and for whom?"
+              />
+
+              <TextAreaField
+                label="Why is it worth doing?"
+                value={form.motivation}
+                onChange={(value) => updateField("motivation", value)}
+                placeholder="Who benefits, what impact will it have, and why now?"
+              />
+            </div>
+
+            <SectionDivider />
+
+            {/* ================= TIMELINE ================= */}
+            <div className="flex flex-col gap-6">
+              <SectionHeading
+                title="Timeline"
+                hint="The end date should be broadly feasible for the scope above."
+              />
+
+              <div className="grid gap-6 sm:grid-cols-3">
                 <div className="flex flex-col gap-2">
-                  <label className={fieldLabelClass}>Timeline</label>
+                  <RequiredLabel>Duration</RequiredLabel>
                   <select
                     value={form.tentative_timeline}
                     onChange={(event) =>
                       updateField("tentative_timeline", event.target.value)
                     }
                     className={inputClass}
+                    required
                   >
                     <option value="1 month">1 month</option>
                     <option value="2 months">2 months</option>
@@ -186,13 +280,28 @@ export default function CreateProjectPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className={fieldLabelClass}>Team Size</label>
+                  <RequiredLabel>End Date</RequiredLabel>
+                  <input
+                    type="date"
+                    min={tomorrowISO()}
+                    value={form.end_date}
+                    onChange={(event) =>
+                      updateField("end_date", event.target.value)
+                    }
+                    className={`${inputClass} [color-scheme:dark]`}
+                    required
+                  />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <RequiredLabel>Team Size</RequiredLabel>
                   <select
                     value={form.team_size}
                     onChange={(event) =>
                       updateField("team_size", event.target.value)
                     }
                     className={inputClass}
+                    required
                   >
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -209,9 +318,10 @@ export default function CreateProjectPage() {
 
             {/* ================= BUDGET ================= */}
             <div className="flex flex-col gap-6">
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-light">
-                Budget
-              </h2>
+              <SectionHeading
+                title="Budget"
+                hint="Reasonable and justified, with all major expenses accounted for."
+              />
 
               <div>
                 <div className="rounded-xl border border-orange/60 bg-orange/[0.06] px-6 py-5">
@@ -279,31 +389,24 @@ export default function CreateProjectPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
-                <label className={fieldLabelClass}>Budget Breakdown</label>
-                <textarea
-                  rows={3}
-                  value={form.budget_breakdown}
-                  onChange={(event) =>
-                    updateField("budget_breakdown", event.target.value)
-                  }
-                  placeholder="Roughly how the funds will be used (components, tools, travel, etc.)"
-                  className={`${inputClass} resize-none`}
-                />
-              </div>
+              <TextAreaField
+                label="Budget Breakdown"
+                rows={4}
+                value={form.budget_breakdown}
+                onChange={(value) => updateField("budget_breakdown", value)}
+                placeholder={"List each major expense with its cost, e.g.\nSensors - ₹4,000\nMicrocontroller - ₹2,500\nFabrication - ₹3,000"}
+              />
             </div>
 
             <SectionDivider />
 
             {/* ================= CONTACT ================= */}
             <div className="flex flex-col gap-6">
-              <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-light">
-                Contact
-              </h2>
+              <SectionHeading title="Contact" />
 
               <div className="grid gap-6 sm:grid-cols-2">
                 <div className="flex flex-col gap-2">
-                  <label className={fieldLabelClass}>Email</label>
+                  <RequiredLabel>Email</RequiredLabel>
                   <input
                     type="email"
                     value={form.contact_email}
@@ -317,7 +420,7 @@ export default function CreateProjectPage() {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className={fieldLabelClass}>Contact Number</label>
+                  <RequiredLabel>Contact Number</RequiredLabel>
                   <input
                     type="tel"
                     value={form.contact_phone}
@@ -331,7 +434,7 @@ export default function CreateProjectPage() {
                 </div>
 
                 <div className="flex flex-col gap-2 sm:col-span-2">
-                  <label className={fieldLabelClass}>Team Lead Name</label>
+                  <RequiredLabel>Team Lead Name</RequiredLabel>
                   <input
                     type="text"
                     value={form.team_lead_name}

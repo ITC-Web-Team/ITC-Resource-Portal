@@ -15,6 +15,14 @@ class Project(models.Model):
     )
     title = models.CharField(max_length=255)
     problem_statement = models.TextField()
+    # Verification criteria: proposal (objective/scope/outcome), motivation,
+    # timeline (end date) and budget. Nullable/blank at the DB level only so
+    # pre-existing rows migrate cleanly - ProjectSerializer requires them all.
+    objective = models.TextField(blank=True)
+    scope = models.TextField(blank=True)
+    expected_outcome = models.TextField(blank=True)
+    motivation = models.TextField(blank=True)
+    end_date = models.DateField(blank=True, null=True)
     domain = models.CharField(max_length=120, blank=True)
     tentative_timeline = models.CharField(max_length=120)
     team_size = models.PositiveSmallIntegerField(blank=True, null=True)
