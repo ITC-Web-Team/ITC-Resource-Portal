@@ -15,6 +15,7 @@ const initialForm = {
   tentative_timeline: "3 months",
   end_date: "",
   team_size: "3",
+  needs_room: false,
   budget_needed: 15000,
   budget_breakdown: "",
   contact_email: "",
@@ -122,6 +123,7 @@ export default function CreateProjectPage() {
         tentative_timeline: form.tentative_timeline,
         end_date: form.end_date,
         team_size: Number(form.team_size),
+        needs_room: form.needs_room,
         budget_needed: Number(form.budget_needed),
         budget_breakdown: form.budget_breakdown.trim(),
         contact_email: form.contact_email.trim(),
@@ -312,6 +314,23 @@ export default function CreateProjectPage() {
                   </select>
                 </div>
               </div>
+
+              <label className="flex cursor-pointer items-center gap-3 rounded-lg border border-white/5 bg-box-light px-4 py-3 text-sm text-white1 transition-colors hover:border-orange/40">
+                <input
+                  type="checkbox"
+                  checked={form.needs_room}
+                  onChange={(event) =>
+                    updateField("needs_room", event.target.checked)
+                  }
+                  className="h-4 w-4 accent-[#FD6E59]"
+                />
+                <span>
+                  <span className="font-bold">We need a room</span>
+                  <span className="text-white2/60">
+                    {" "}— tick if your team needs room retention for this project
+                  </span>
+                </span>
+              </label>
             </div>
 
             <SectionDivider />

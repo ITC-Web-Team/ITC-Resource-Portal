@@ -166,6 +166,10 @@ export default function AdminProjectDetailsPage() {
                 <Field label="Duration" value={project.tentative_timeline} />
                 <Field label="Team Size" value={project.team_size} />
               </div>
+              <Field
+                label="Room Needed"
+                value={project.needs_room ? "Yes" : "No"}
+              />
             </ReviewSection>
 
             <ReviewSection

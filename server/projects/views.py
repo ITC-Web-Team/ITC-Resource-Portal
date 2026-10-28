@@ -164,6 +164,7 @@ def request_details(request, pk):
             project.end_date.isoformat() if project.end_date else None
         ),
         "team_size": project.team_size,
+        "needs_room": project.needs_room,
         "submitted_by_name": project.created_by.name,
         "submitted_by_roll_no": project.created_by.roll_no,
         "budget_needed": str(project.budget_needed),

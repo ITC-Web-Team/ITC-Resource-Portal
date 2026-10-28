@@ -26,6 +26,7 @@ class Project(models.Model):
     domain = models.CharField(max_length=120, blank=True)
     tentative_timeline = models.CharField(max_length=120)
     team_size = models.PositiveSmallIntegerField(blank=True, null=True)
+    needs_room = models.BooleanField(default=False)
     budget_needed = models.DecimalField(max_digits=12, decimal_places=2)
     budget_breakdown = models.TextField(blank=True)
     contact_info = models.CharField(max_length=255, blank=True)

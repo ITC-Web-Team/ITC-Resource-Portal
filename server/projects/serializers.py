@@ -47,6 +47,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "tentative_timeline",
             "end_date",
             "team_size",
+            "needs_room",
             "budget_needed",
             "budget_breakdown",
             "contact_info",
